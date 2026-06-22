@@ -19,7 +19,9 @@
 	const teamMembers = $derived((project?.teamMembers ?? []).filter((name) => name.trim()));
 	const funding = $derived((project?.funding ?? []).filter((source) => source.trim()));
 	const links = $derived((project?.links ?? []).filter((link) => link.href));
-	const hasDetails = $derived(teamMembers.length > 0 || funding.length > 0);
+	const summaryPlain = $derived(
+		(project?.summary ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+	);
 
 	onMount(async () => {
 		const key = page.params.slug;
@@ -47,7 +49,7 @@
 <Seo
 	brand="CREATE Lab"
 	title={project?.title ?? 'Project'}
-	description={project?.summary ||
+	description={summaryPlain ||
 		(project
 			? `${project.title}, a project of the CREATE Lab at George Mason University.`
 			: 'A project of the CREATE Lab at George Mason University.')}
@@ -74,7 +76,8 @@
 		<div class="mt-3 h-1 w-12 bg-gmu-gold"></div>
 
 		{#if project.summary}
-			<p class="mt-6 text-lg leading-relaxed text-slate-600">{project.summary}</p>
+			<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+			<div class="rich-content mt-6 text-lg text-slate-600">{@html project.summary}</div>
 		{/if}
 
 		{#if tags.length}
@@ -116,54 +119,51 @@
 			<div class="rich-content mt-8 text-slate-700">{@html project.content}</div>
 		{/if}
 
-		{#if hasDetails}
-			<div class="mt-10 grid gap-6 rounded-lg border border-slate-200 bg-slate-50 p-6 sm:grid-cols-2">
-				{#if teamMembers.length}
-					<div>
-						<h2 class="text-xs font-semibold tracking-widest text-gmu-green uppercase">Team</h2>
-						<ul class="mt-3 space-y-2">
-							{#each teamMembers as name (name)}
-								{@const member = memberByName[name]}
-								<li>
-									{#if member}
-										<a
-											href={`/team/${member.slug || member.id}`}
-											class="group flex items-center gap-3"
-										>
-											<img
-												src={memberPhoto(member.photo)}
-												alt={member.name}
-												class="h-9 w-9 shrink-0 rounded-full border border-slate-200 object-cover"
-											/>
-											<span class="text-sm font-medium text-slate-700 group-hover:text-gmu-green">
-												{member.name}
-											</span>
-										</a>
-									{:else}
-										<span class="flex items-center gap-3">
-											<img
-												src={memberPhoto(undefined)}
-												alt=""
-												class="h-9 w-9 shrink-0 rounded-full border border-slate-200 object-cover"
-											/>
-											<span class="text-sm text-slate-700">{name}</span>
-										</span>
-									{/if}
-								</li>
-							{/each}
-						</ul>
-					</div>
-				{/if}
-				{#if funding.length}
-					<div>
-						<h2 class="text-xs font-semibold tracking-widest text-gmu-green uppercase">Funding</h2>
-						<ul class="mt-3 space-y-1 text-sm text-slate-700">
-							{#each funding as source (source)}
-								<li>{source}</li>
-							{/each}
-						</ul>
-					</div>
-				{/if}
+		{#if teamMembers.length}
+			<div class="mt-12">
+				<h2 class="text-lg font-bold text-slate-900">Team</h2>
+				<div class="mt-5 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-4">
+					{#each teamMembers as name (name)}
+						{@const member = memberByName[name]}
+						{#if member}
+							<a
+								href={`/team/${member.slug || member.id}`}
+								class="group flex flex-col items-center text-center"
+							>
+								<img
+									src={memberPhoto(member.photo)}
+									alt={member.name}
+									class="h-20 w-20 rounded-full border border-slate-200 object-cover transition group-hover:border-gmu-green group-hover:shadow-md"
+								/>
+								<span class="mt-2 text-sm font-medium text-slate-800 group-hover:text-gmu-green">
+									{member.name}
+								</span>
+							</a>
+						{:else}
+							<div class="flex flex-col items-center text-center">
+								<img
+									src={memberPhoto(undefined)}
+									alt=""
+									class="h-20 w-20 rounded-full border border-slate-200 object-cover"
+								/>
+								<span class="mt-2 text-sm text-slate-700">{name}</span>
+							</div>
+						{/if}
+					{/each}
+				</div>
+			</div>
+		{/if}
+
+		{#if funding.length}
+			<div class="mt-12">
+				<h2 class="text-lg font-bold text-slate-900">Funding</h2>
+				<ul class="mt-4 flex flex-wrap gap-2">
+					{#each funding as source (source)}
+						<li class="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-700">
+							{source}
+						</li>
+					{/each}
+				</ul>
 			</div>
 		{/if}
 

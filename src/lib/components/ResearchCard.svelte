@@ -6,6 +6,9 @@
 	let { project, featured = false }: { project: ResearchProject; featured?: boolean } = $props();
 
 	const link = $derived(projectLink(project, `${basePath}/research`, `${basePath}/projects`));
+	const summaryText = $derived(
+		(project.summary ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+	);
 </script>
 
 <a
@@ -43,8 +46,8 @@
 			<p class="font-mono text-xs text-gmu-green">{project.status ?? project.years}</p>
 		{/if}
 		<h3 class="mt-1 font-semibold text-slate-900">{project.title}</h3>
-		{#if project.summary}
-			<p class="mt-2 line-clamp-2 text-sm text-slate-600">{project.summary}</p>
+		{#if summaryText}
+			<p class="mt-2 line-clamp-2 text-sm text-slate-600">{summaryText}</p>
 		{/if}
 		<span
 			class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-gmu-green group-hover:gap-2"
