@@ -18,10 +18,7 @@
 			width="56"
 			class="text-gmu-gold"
 		/>
-		<p class="mt-6 font-mono text-xs font-semibold tracking-widest text-gmu-gold uppercase">
-			// Error {page.status}
-		</p>
-		<h1 class="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
+		<h1 class="mt-6 text-4xl font-bold tracking-tight sm:text-5xl">
 			{isNotFound ? 'Page not found' : 'Something went wrong'}
 		</h1>
 		<div class="mt-4 h-1 w-16 bg-gmu-gold"></div>
