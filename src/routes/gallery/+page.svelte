@@ -51,21 +51,25 @@
 	{#if loading || items.length === 0}
 		<LoadState {loading} empty="No gallery images yet." />
 	{:else}
-		<div class="columns-2 gap-4 sm:columns-3 lg:columns-4">
+		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
 			{#each items as item, index (index)}
 				<button
 					type="button"
 					onclick={() => open(index)}
-					class="group mb-4 block w-full break-inside-avoid overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
+					class="group relative block aspect-square w-full overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
 				>
 					<img
 						src={item.image}
 						alt={item.title ?? ''}
 						loading="lazy"
-						class="w-full transition-transform duration-300 group-hover:scale-105"
+						class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
 					/>
 					{#if item.title}
-						<p class="px-3 py-2 text-left text-sm text-slate-600">{item.title}</p>
+						<p
+							class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-3 pt-8 pb-2 text-left text-sm text-white"
+						>
+							{item.title}
+						</p>
 					{/if}
 				</button>
 			{/each}
