@@ -37,7 +37,7 @@
 <PageHero eyebrow="Team" title="The People" />
 
 <section class="bg-slate-100">
-	<div class="mx-auto max-w-6xl px-4 py-16">
+	<div class="mx-auto max-w-7xl px-4 py-16">
 		{#if loading || !professor}
 			<LoadState {loading} empty="No team members yet." />
 		{:else}

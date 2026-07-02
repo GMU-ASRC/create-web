@@ -48,6 +48,9 @@
 					<span class="w-28 shrink-0 font-mono text-xs font-semibold text-gmu-green">{formatDate(item.date)}</span>
 					<div>
 						<h2 class="font-semibold text-slate-900">{item.title}</h2>
+						{#if item.author}
+							<p class="mt-0.5 text-xs font-medium text-slate-500">By {item.author}</p>
+						{/if}
 						{#if item.body}
 							<div class="rich-content mt-2 text-sm text-slate-600">{@html item.body}</div>
 						{/if}

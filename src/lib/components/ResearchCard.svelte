@@ -46,6 +46,9 @@
 			<p class="font-mono text-xs text-gmu-green">{project.status ?? project.years}</p>
 		{/if}
 		<h3 class="mt-1 font-semibold text-slate-900">{project.title}</h3>
+		{#if project.author}
+			<p class="mt-0.5 text-xs font-medium text-slate-500">By {project.author}</p>
+		{/if}
 		{#if summaryText}
 			<p class="mt-2 line-clamp-2 text-sm text-slate-600">{summaryText}</p>
 		{/if}

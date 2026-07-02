@@ -23,6 +23,7 @@
 			const match = projects.find((project) => project.slug === article.slug);
 			return {
 				title: article.title,
+				author: article.author,
 				years: article.years,
 				slug: article.slug,
 				image: resolveAsset(article.image) || match?.image || '',
@@ -43,7 +44,7 @@
 <PageHero eyebrow="Research" title="Research Articles" />
 
 <section class="bg-slate-100">
-	<div class="mx-auto max-w-6xl px-4 py-16">
+	<div class="mx-auto max-w-7xl px-4 py-16">
 		{#if loading || articles.length === 0}
 			<LoadState {loading} empty="No research articles yet." />
 		{:else}

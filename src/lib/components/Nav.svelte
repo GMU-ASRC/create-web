@@ -22,7 +22,7 @@
 
 <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
 	<div class="h-1 w-full bg-gmu-green"></div>
-	<nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+	<nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
 		<a href={homeHref} class="flex items-center gap-2">
 			<img src={logo} alt="" class="h-9 w-auto" />
 			<span class="text-lg font-bold tracking-tight text-slate-900">{siteName}</span>

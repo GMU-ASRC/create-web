@@ -4,12 +4,21 @@
 	let { images = [], alt = '' }: { images?: string[]; alt?: string } = $props();
 
 	let index = $state(0);
+	let restart = $state(0);
 
 	const intervalMs = 9000;
 	const slant = 22;
 	const nodes = [0.16, 0.42, 0.68, 0.9];
 
+	function goTo(target: number) {
+		const count = images.length;
+		if (count === 0) return;
+		index = ((target % count) + count) % count;
+		restart += 1;
+	}
+
 	$effect(() => {
+		restart;
 		const count = images.length;
 		if (count <= 1) return;
 		if (untrack(() => index) >= count) index = 0;
@@ -64,6 +73,22 @@
 			style="left: {slant * (1 - t)}%; top: {t * 100}%;"
 		></span>
 	{/each}
+
+	{#if images.length > 1}
+		<div class="pointer-events-auto absolute inset-x-0 bottom-6 z-20 flex justify-center gap-2.5">
+			{#each images as src, i (src + i)}
+				<button
+					type="button"
+					onclick={() => goTo(i)}
+					aria-label={`Show image ${i + 1}`}
+					aria-current={i === index}
+					class="h-2.5 rounded-full ring-1 ring-black/20 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gmu-gold {i === index
+						? 'w-7 bg-gmu-gold'
+						: 'w-2.5 bg-white/60 hover:bg-white'}"
+				></button>
+			{/each}
+		</div>
+	{/if}
 </div>
 
 <style>

@@ -27,7 +27,35 @@ export type SiteInfo = {
 	featuredProject?: SiteFeatured;
 	contact?: SiteContact;
 	showAccessibility?: boolean;
+	alerts?: SiteAlert[];
+	highlights?: SiteHighlight[];
 };
+
+export type SiteAlert = {
+	message?: string;
+	level?: string;
+	link?: string;
+	linkText?: string;
+	dismissible?: boolean;
+	active?: boolean;
+};
+
+export type SiteHighlight = {
+	title?: string;
+	body?: string;
+	image?: string;
+	link?: string;
+	linkText?: string;
+	location?: string;
+	active?: boolean;
+};
+
+export const highlightLocations = {
+	allTop: 'Top of every page',
+	allBottom: 'Bottom of every page',
+	homeHero: 'Homepage below hero',
+	homeFooter: 'Homepage above footer'
+} as const;
 
 export const siteNav: NavLink[] = [
 	{ label: 'Home', path: '' },

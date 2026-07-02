@@ -27,7 +27,7 @@
 		style="background-image: radial-gradient(#ffffff 1.2px, transparent 1.2px); background-size: 18px 18px;"
 	></div>
 
-	<div class="relative mx-auto grid max-w-6xl gap-8 px-4 py-8 sm:grid-cols-2">
+	<div class="relative mx-auto grid max-w-7xl gap-8 px-4 py-8 sm:grid-cols-2">
 		<div>
 			<div class="flex items-center gap-2.5">
 				<span class="flex h-9 w-9 items-center justify-center rounded-lg bg-white shadow-sm">
@@ -69,7 +69,7 @@
 
 	{#if showAccessibility}
 		<div class="relative border-t border-white/15">
-			<div class="mx-auto max-w-6xl px-4 py-5">
+			<div class="mx-auto max-w-7xl px-4 py-5">
 				<AccessibilityControls />
 			</div>
 		</div>

@@ -24,6 +24,16 @@ function absolutizeAssets(html: string): string {
 	return html.replace(/(["'(])\/api\/files\//g, `$1${base}/api/files/`);
 }
 
+function resolveFiles(files: unknown): Array<{ name: string; path: string }> {
+	if (!Array.isArray(files)) return [];
+	return files
+		.map((file) => ({
+			name: String((file as { name?: unknown })?.name ?? ''),
+			path: resolveAsset(String((file as { path?: unknown })?.path ?? '')) ?? ''
+		}))
+		.filter((file) => file.path);
+}
+
 function normalizeEducation(education: unknown): Education[] {
 	if (!Array.isArray(education)) return [];
 	return education
@@ -93,7 +103,12 @@ export const cms = {
 			return Number.isNaN(time) ? -Infinity : time;
 		};
 		return items
-			.map((item) => ({ ...item, body: absolutizeAssets(item.body ?? '') }))
+			.map((item) => ({
+				...item,
+				body: absolutizeAssets(item.body ?? ''),
+				gallery: (item.gallery ?? []).map((path) => resolveAsset(path) ?? '').filter(Boolean),
+				files: resolveFiles(item.files)
+			}))
 			.sort((first, second) => timeOf(second.date) - timeOf(first.date));
 	},
 
@@ -107,7 +122,8 @@ export const cms = {
 				content: absolutizeAssets(project.content ?? ''),
 				gallery: (project.gallery ?? [])
 					.map((path) => resolveAsset(path) ?? '')
-					.filter(Boolean)
+					.filter(Boolean),
+				files: resolveFiles(project.files)
 			})) ?? null
 		);
 	},
@@ -177,7 +193,9 @@ export const cms = {
 		return {
 			...article,
 			content: absolutizeAssets(article.content ?? ''),
-			blocks: (article.blocks ?? []).map((block) => ({ ...block, image: resolveAsset(block.image) }))
+			blocks: (article.blocks ?? []).map((block) => ({ ...block, image: resolveAsset(block.image) })),
+			gallery: (article.gallery ?? []).map((path) => resolveAsset(path) ?? '').filter(Boolean),
+			files: resolveFiles(article.files)
 		};
 	}
 };

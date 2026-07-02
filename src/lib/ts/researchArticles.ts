@@ -1,3 +1,5 @@
+import type { FileAttachment } from './files';
+
 export type ArticleBlock = {
 	lead?: string;
 	text: string;
@@ -9,10 +11,13 @@ export type ArticleBlock = {
 export type ResearchArticle = {
 	slug: string;
 	title: string;
+	author?: string;
 	years: string;
 	image?: string;
 	content?: string;
 	blocks: ArticleBlock[];
+	gallery?: string[];
+	files?: FileAttachment[];
 	relatedPublications: string[];
 };
 

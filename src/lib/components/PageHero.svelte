@@ -9,7 +9,7 @@
 		style="background-image: radial-gradient(#ffffff 1.2px, transparent 1.2px); background-size: 18px 18px;"
 	></div>
 	<div class="absolute top-0 right-0 h-full w-2 bg-gmu-gold"></div>
-	<div class="relative mx-auto max-w-6xl px-4 py-16">
+	<div class="relative mx-auto max-w-7xl px-4 py-16">
 		<h1 class="text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
 		<div class="mt-3 h-1 w-12 bg-gmu-gold"></div>
 		{#if description}

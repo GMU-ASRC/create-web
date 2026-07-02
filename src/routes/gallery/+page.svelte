@@ -13,9 +13,16 @@
 
 	const current = $derived(lightbox === null ? null : items[lightbox]);
 
+	const videoExtensions = /\.(mp4|webm|ogg|ogv|mov|m4v)$/i;
+
+	function isVideo(item: GalleryItem): boolean {
+		if (item.type) return item.type.startsWith('video/');
+		return videoExtensions.test(item.image);
+	}
+
 	onMount(async () => {
 		items = (await cms.gallery()) ?? [];
-		preloadImages(items.map((item) => item.image));
+		preloadImages(items.filter((item) => !isVideo(item)).map((item) => item.image));
 		loading = false;
 	});
 
@@ -47,7 +54,7 @@
 
 <PageHero eyebrow="Gallery" title="Gallery" />
 
-<section class="mx-auto max-w-6xl px-4 py-16">
+<section class="mx-auto max-w-7xl px-4 py-16">
 	{#if loading || items.length === 0}
 		<LoadState {loading} empty="No gallery images yet." />
 	{:else}
@@ -58,12 +65,24 @@
 					onclick={() => open(index)}
 					class="group relative block aspect-square w-full overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
 				>
-					<img
-						src={item.image}
-						alt={item.title ?? ''}
-						loading="lazy"
-						class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-					/>
+					{#if isVideo(item)}
+						<video
+							src={item.image}
+							muted
+							preload="metadata"
+							class="h-full w-full bg-slate-900 object-cover transition-transform duration-300 group-hover:scale-105"
+						></video>
+						<span class="pointer-events-none absolute inset-0 flex items-center justify-center text-white/90">
+							<Icon icon="mdi:play-circle-outline" width="48" />
+						</span>
+					{:else}
+						<img
+							src={item.image}
+							alt={item.title ?? ''}
+							loading="lazy"
+							class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+						/>
+					{/if}
 					{#if item.title}
 						<p
 							class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-3 pt-8 pb-2 text-left text-sm text-white"
@@ -107,7 +126,17 @@
 			</button>
 		{/if}
 		<figure class="relative z-10 max-w-4xl">
-			<img src={current.image} alt={current.title ?? ''} class="mx-auto max-h-[85vh] w-auto rounded-lg" />
+			{#if isVideo(current)}
+				<!-- svelte-ignore a11y_media_has_caption -->
+				<video
+					src={current.image}
+					controls
+					autoplay
+					class="mx-auto max-h-[85vh] w-auto rounded-lg"
+				></video>
+			{:else}
+				<img src={current.image} alt={current.title ?? ''} class="mx-auto max-h-[85vh] w-auto rounded-lg" />
+			{/if}
 			{#if current.title}
 				<figcaption class="mt-3 text-center text-sm text-white/80">{current.title}</figcaption>
 			{/if}

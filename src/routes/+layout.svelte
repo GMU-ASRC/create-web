@@ -1,10 +1,16 @@
 <script lang="ts">
 	import '$lib/css/app.css';
 	import { onMount } from 'svelte';
+	import { dev } from '$app/environment';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import Nav from '$lib/components/Nav.svelte';
 	import Footer from '$lib/components/Footer.svelte';
+	import SiteAlerts from '$lib/components/SiteAlerts.svelte';
+	import Highlights from '$lib/components/Highlights.svelte';
 	import { cms, resolveAsset } from '$lib/ts/cms';
-	import type { SiteInfo } from '$lib/ts/site';
+	import { highlightLocations, type SiteInfo } from '$lib/ts/site';
+
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
 
 	let { children } = $props();
 
@@ -26,10 +32,13 @@
 </svelte:head>
 
 <div class="flex min-h-screen flex-col bg-slate-100 text-slate-900">
+	<SiteAlerts alerts={info?.alerts ?? []} />
 	<Nav siteName={info?.labName ?? ''} {logo} />
+	<Highlights highlights={info?.highlights ?? []} location={highlightLocations.allTop} />
 	<main class="flex-1">
 		{@render children()}
 	</main>
+	<Highlights highlights={info?.highlights ?? []} location={highlightLocations.allBottom} />
 	<Footer
 		siteName={info?.labName ?? ''}
 		institution={info?.institution ?? ''}

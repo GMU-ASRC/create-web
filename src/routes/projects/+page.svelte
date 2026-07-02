@@ -37,7 +37,7 @@
 <PageHero eyebrow="Projects" title="Our Projects" />
 
 <section class="bg-slate-100">
-	<div class="mx-auto max-w-6xl px-4 py-16">
+	<div class="mx-auto max-w-7xl px-4 py-16">
 		{#if loading || projects.length === 0}
 			<LoadState {loading} empty="No projects yet." />
 		{:else}

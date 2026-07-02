@@ -1,3 +1,5 @@
+import type { FileAttachment } from './files';
+
 export type ProjectLink = {
 	label?: string;
 	href?: string;
@@ -6,6 +8,7 @@ export type ProjectLink = {
 export type ResearchProject = {
 	id?: string;
 	title: string;
+	author?: string;
 	years?: string;
 	summary?: string;
 	status?: string;
@@ -19,6 +22,7 @@ export type ResearchProject = {
 	funding?: string[];
 	links?: ProjectLink[];
 	gallery?: string[];
+	files?: FileAttachment[];
 	relatedPublications?: string[];
 	linkType?: 'external' | 'article' | 'page';
 };

@@ -4,6 +4,7 @@
 	import { page } from '$app/state';
 	import Seo from '$lib/components/Seo.svelte';
 	import PublicationList from '$lib/components/PublicationList.svelte';
+	import FileList from '$lib/components/FileList.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
 	import { cms, relatedSectionsFrom } from '$lib/ts/cms';
 	import type { ResearchProject } from '$lib/ts/research';
@@ -22,6 +23,12 @@
 	const summaryPlain = $derived(
 		(project?.summary ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
 	);
+
+	const videoExtensions = /\.(mp4|webm|ogg|ogv|mov|m4v)$/i;
+
+	function isVideo(src: string): boolean {
+		return videoExtensions.test(src);
+	}
 
 	onMount(async () => {
 		const key = page.params.slug;
@@ -172,15 +179,27 @@
 				<h2 class="text-lg font-bold text-slate-900">Gallery</h2>
 				<div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3">
 					{#each project.gallery as src (src)}
-						<img
-							{src}
-							alt=""
-							class="aspect-square w-full rounded-lg border border-slate-200 object-cover"
-						/>
+						{#if isVideo(src)}
+							<!-- svelte-ignore a11y_media_has_caption -->
+							<video
+								{src}
+								controls
+								preload="metadata"
+								class="aspect-square w-full rounded-lg border border-slate-200 bg-slate-900 object-cover"
+							></video>
+						{:else}
+							<img
+								{src}
+								alt=""
+								class="aspect-square w-full rounded-lg border border-slate-200 object-cover"
+							/>
+						{/if}
 					{/each}
 				</div>
 			</div>
 		{/if}
+
+		<FileList files={project.files} />
 
 		{#each relatedSections as section (section.heading)}
 			<div class="mt-12">

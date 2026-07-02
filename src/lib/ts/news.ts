@@ -1,11 +1,16 @@
+import type { FileAttachment } from './files';
+
 export type NewsEntry = {
 	id?: string;
 	title: string;
+	author?: string;
 	date: string;
 	body?: string;
 	linkType?: 'none' | 'external' | 'article';
 	href?: string;
 	slug?: string;
+	gallery?: string[];
+	files?: FileAttachment[];
 };
 
 export function newsLink(

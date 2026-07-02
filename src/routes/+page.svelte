@@ -6,10 +6,12 @@
 	import ResearchCard from '$lib/components/ResearchCard.svelte';
 	import SponsorGrid from '$lib/components/SponsorGrid.svelte';
 	import HeroShowcase from '$lib/components/HeroShowcase.svelte';
+	import Highlights from '$lib/components/Highlights.svelte';
 	import { cms, resolveAsset, preloadImages } from '$lib/ts/cms';
 	import type { ResearchProject } from '$lib/ts/research';
 	import { newsLink, type NewsEntry } from '$lib/ts/news';
 	import type { Sponsor } from '$lib/ts/home';
+	import { highlightLocations, type SiteHighlight } from '$lib/ts/site';
 
 	type SiteInfo = {
 		logo?: string;
@@ -17,6 +19,7 @@
 		tagline?: string;
 		intro?: string;
 		heroImages?: string[];
+		highlights?: SiteHighlight[];
 	};
 
 	let heroImages = $state<string[]>([]);
@@ -26,6 +29,7 @@
 	let projects = $state<ResearchProject[]>([]);
 	let sponsors = $state<Sponsor[]>([]);
 	let news = $state<NewsEntry[]>([]);
+	let highlights = $state<SiteHighlight[]>([]);
 
 	const featuredProjects = $derived(
 		[...projects]
@@ -55,6 +59,7 @@
 				.filter((path): path is string => typeof path === 'string' && path.length > 0)
 				.map((path) => resolveAsset(path))
 				.filter((src): src is string => Boolean(src));
+			highlights = info.highlights ?? [];
 		}
 		projects = projectData ?? [];
 		sponsors = sponsorData ?? [];
@@ -75,7 +80,7 @@
 		style="background-image: radial-gradient(#ffffff 1.2px, transparent 1.2px); background-size: 20px 20px;"
 	></div>
 	<HeroShowcase images={heroImages} alt={labName} />
-	<div class="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-28 md:grid-cols-2">
+	<div class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-28 md:grid-cols-2">
 		<div>
 			<p class="font-mono text-xs font-semibold tracking-widest text-gmu-gold uppercase">
 				{labTagline}
@@ -103,8 +108,10 @@
 	</div>
 </section>
 
+<Highlights {highlights} location={highlightLocations.homeHero} />
+
 <section class="bg-slate-100">
-	<div class="mx-auto max-w-6xl px-4 py-10">
+	<div class="mx-auto max-w-7xl px-4 py-10">
 		<div class="flex items-end justify-between gap-4">
 			<SectionHeading
 				eyebrow="Projects"
@@ -128,7 +135,7 @@
 </section>
 
 {#if recentNews.length > 0}
-<section class="mx-auto max-w-6xl px-4 py-10">
+<section class="mx-auto max-w-7xl px-4 py-10">
 	<div class="flex items-end justify-between gap-4">
 		<SectionHeading eyebrow="News" title="Latest updates" />
 		<a
@@ -144,6 +151,9 @@
 			<article class="flex flex-col border border-slate-200 border-l-4 border-l-gmu-gold bg-white p-5 shadow-sm transition-colors hover:border-gmu-green hover:border-l-gmu-gold">
 				<p class="font-mono text-xs text-gmu-green">{formatDate(item.date)}</p>
 				<h3 class="mt-2 font-semibold text-slate-900">{item.title}</h3>
+				{#if item.author}
+					<p class="mt-0.5 text-xs font-medium text-slate-500">By {item.author}</p>
+				{/if}
 				{#if link}
 					<a
 						href={link.href}
@@ -163,7 +173,7 @@
 
 {#if sponsors.length > 0}
 	<section class="bg-gmu-green-light">
-		<div class="mx-auto max-w-6xl px-4 py-16">
+		<div class="mx-auto max-w-7xl px-4 py-16">
 			<h2 class="text-center font-mono text-xl font-bold tracking-wide text-gmu-green uppercase sm:text-2xl">
 				Sponsors and Collaborators
 			</h2>
@@ -173,3 +183,5 @@
 		</div>
 	</section>
 {/if}
+
+<Highlights {highlights} location={highlightLocations.homeFooter} />
