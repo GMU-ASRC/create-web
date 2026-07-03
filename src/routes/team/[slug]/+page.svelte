@@ -5,14 +5,17 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
 	import EducationList from '$lib/components/EducationList.svelte';
+	import PublicationList from '$lib/components/PublicationList.svelte';
 	import { socialIcon, socialLabel } from '$lib/ts/socialIcons';
 	import { cms } from '$lib/ts/cms';
 	import { memberPhoto, type Member } from '$lib/ts/group';
 	import { projectLink, type ResearchProject } from '$lib/ts/research';
+	import { publicationsForMember, type PublicationSection } from '$lib/ts/publications';
 
 	let member = $state<Member | null>(null);
 	let label = $state('');
 	let projects = $state<ResearchProject[]>([]);
+	let publicationSections = $state<PublicationSection[]>([]);
 	let loading = $state(true);
 
 	const memberProjects = $derived(
@@ -23,9 +26,18 @@
 			: []
 	);
 
+	const memberPublications = $derived<PublicationSection>({
+		heading: 'Publications',
+		entries: member ? publicationsForMember(publicationSections, member.name) : []
+	});
+
 	onMount(async () => {
 		const slug = page.params.slug;
-		const [data, projectData] = await Promise.all([cms.team(), cms.projects()]);
+		const [data, projectData, publicationData] = await Promise.all([
+			cms.team(),
+			cms.projects(),
+			cms.publications()
+		]);
 		if (data) {
 			const everyone = [
 				{ member: data.professor, label: 'Professor' },
@@ -42,6 +54,7 @@
 			}
 		}
 		projects = projectData ?? [];
+		publicationSections = publicationData ?? [];
 		loading = false;
 	});
 </script>
@@ -52,6 +65,9 @@
 	description={member
 		? `${member.name}, ${label} in the CREATE Lab at George Mason University.`
 		: 'A member of the CREATE Lab at George Mason University.'}
+	image={member?.photo || '/create_logo.png'}
+	url={page.url.href}
+	type="profile"
 />
 
 <div class="mx-auto max-w-4xl px-4 py-12">
@@ -152,6 +168,15 @@
 						</li>
 					{/each}
 				</ul>
+			</div>
+		{/if}
+
+		{#if memberPublications.entries.length > 0}
+			<div class="mt-12">
+				<h2 class="text-lg font-bold text-slate-900">Publications</h2>
+				<div class="mt-4">
+					<PublicationList section={memberPublications} />
+				</div>
 			</div>
 		{/if}
 	{/if}
