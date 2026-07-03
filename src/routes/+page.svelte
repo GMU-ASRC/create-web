@@ -23,6 +23,7 @@
 	};
 
 	let heroImages = $state<string[]>([]);
+	let labLogo = $state('/create_logo.png');
 	let labName = $state('');
 	let labTagline = $state('');
 	let labIntro = $state('');
@@ -52,6 +53,7 @@
 			cms.news()
 		]);
 		if (info) {
+			labLogo = resolveAsset(info.logo) || '/create_logo.png';
 			labName = info.labName ?? '';
 			labTagline = info.tagline ?? '';
 			labIntro = info.intro ?? '';
@@ -81,27 +83,34 @@
 	></div>
 	<HeroShowcase images={heroImages} alt={labName} />
 	<div class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-28 md:grid-cols-2">
-		<div>
-			<p class="font-mono text-xs font-semibold tracking-widest text-gmu-gold uppercase">
-				{labTagline}
-			</p>
-			<h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-5xl">{labName}</h1>
-			<div class="mt-4 h-1 w-16 bg-gmu-gold"></div>
-			<p class="mt-6 text-lg text-white/85">{labIntro}</p>
-			<div class="mt-8 flex flex-wrap gap-3">
-				<a
-					href="/projects"
-					class="inline-flex items-center gap-2 bg-gmu-gold px-5 py-3 text-sm font-bold text-gmu-green-dark transition-colors hover:bg-white"
-				>
-					View Projects
-					<Icon icon="mdi:arrow-right" width="18" />
-				</a>
-				<a
-					href="/team"
-					class="inline-flex items-center gap-2 border border-white/50 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-				>
-					Meet the Team
-				</a>
+		<div class="flex flex-col items-center gap-6 sm:flex-row sm:items-center">
+			{#if labLogo}
+				<img src={labLogo} alt="" class="h-46 w-auto shrink-0 rounded-lg bg-white sm:h-44 md:h-48" />
+			{/if}
+			<div>
+				<p class="font-mono text-xs font-semibold tracking-widest text-gmu-gold uppercase">
+					{labTagline}
+				</p>
+				<div class="mt-4 flex items-center gap-4">
+					<h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{labName}</h1>
+				</div>
+				<div class="mt-4 h-1 w-16 bg-gmu-gold"></div>
+				<p class="mt-6 text-lg text-white/85">{labIntro}</p>
+				<div class="mt-8 flex flex-wrap gap-3">
+					<a
+						href="/projects"
+						class="inline-flex items-center gap-2 bg-gmu-gold px-5 py-3 text-sm font-bold text-gmu-green-dark transition-colors hover:bg-white"
+					>
+						View Projects
+						<Icon icon="mdi:arrow-right" width="18" />
+					</a>
+					<a
+						href="/team"
+						class="inline-flex items-center gap-2 border border-white/50 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+					>
+						Meet the Team
+					</a>
+				</div>
 			</div>
 		</div>
 		<div class="hidden md:block"></div>
