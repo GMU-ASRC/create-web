@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 	import Icon from '@iconify/svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
@@ -50,6 +51,7 @@
 	brand="CREATE Lab"
 	title="Gallery"
 	description="Photos from the CREATE Lab at George Mason University."
+	url={page.url.href}
 />
 
 <PageHero eyebrow="Gallery" title="Gallery" />

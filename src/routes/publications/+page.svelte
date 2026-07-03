@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 	import Icon from '@iconify/svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
@@ -54,6 +55,7 @@
 	brand="CREATE Lab"
 	title="Publications"
 	description="Journal articles, book chapters, and conference proceedings from the CREATE Lab on event-triggered control, multi-agent coordination, and epidemic processes."
+	url={page.url.href}
 />
 
 <PageHero eyebrow="Publications" title="Publications" />

@@ -6,7 +6,7 @@
 	import PublicationList from '$lib/components/PublicationList.svelte';
 	import FileList from '$lib/components/FileList.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
-	import { cms, relatedSectionsFrom } from '$lib/ts/cms';
+	import { cms, resolveAsset, relatedSectionsFrom } from '$lib/ts/cms';
 	import type { ResearchArticle } from '$lib/ts/researchArticles';
 	import type { PublicationSection } from '$lib/ts/publications';
 
@@ -37,6 +37,9 @@
 	description={article
 		? `${article.title} (${article.years}), a research theme of the CREATE Lab at George Mason University.`
 		: 'A research theme of the CREATE Lab at George Mason University.'}
+	image={resolveAsset(article?.image) || '/create_logo.png'}
+	url={page.url.href}
+	type="article"
 />
 
 <div class="mx-auto max-w-3xl px-4 py-12">

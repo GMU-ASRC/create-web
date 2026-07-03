@@ -6,6 +6,7 @@
 	import LoadState from '$lib/components/LoadState.svelte';
 	import { cms } from '$lib/ts/cms';
 	import type { Publication } from '$lib/ts/publications';
+	import { formatDate } from '$lib/ts/dates';
 
 	let publication = $state<Publication | null>(null);
 	let loading = $state(true);
@@ -17,12 +18,6 @@
 		publication = all.find((entry) => entry.id === id) ?? null;
 		loading = false;
 	});
-
-	function formatDate(value: string): string {
-		const date = new Date(value);
-		if (Number.isNaN(date.getTime())) return value;
-		return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', timeZone: 'UTC' });
-	}
 
 	function doiLink(doi: string): string {
 		return /^https?:\/\//.test(doi) ? doi : `https://doi.org/${doi}`;
@@ -60,6 +55,8 @@
 	description={publication
 		? `${publication.authors}. ${publication.title} ${publication.venue}`
 		: 'A publication from the CREATE Lab at George Mason University.'}
+	url={page.url.href}
+	type="article"
 />
 
 <div class="mx-auto max-w-4xl px-4 py-12">

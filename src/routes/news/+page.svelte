@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page as pageState } from '$app/state';
 	import Icon from '@iconify/svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
@@ -7,6 +8,7 @@
 	import Pagination from '$lib/components/Pagination.svelte';
 	import { cms } from '$lib/ts/cms';
 	import { newsLink, type NewsEntry } from '$lib/ts/news';
+	import { formatDate } from '$lib/ts/dates';
 
 	const newsBase = '/news';
 	const pageSize = 10;
@@ -16,12 +18,6 @@
 	let page = $state(1);
 
 	const visible = $derived(news.slice((page - 1) * pageSize, page * pageSize));
-
-	function formatDate(value: string): string {
-		const date = new Date(value);
-		if (Number.isNaN(date.getTime())) return value;
-		return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', timeZone: 'UTC' });
-	}
 
 	onMount(async () => {
 		news = (await cms.news()) ?? [];
@@ -33,6 +29,7 @@
 	brand="CREATE Lab"
 	title="News"
 	description="The latest news and announcements from the CREATE Lab at George Mason University, including awards, grants, and competition updates."
+	url={pageState.url.href}
 />
 
 <PageHero eyebrow="News" title="News and Updates" />

@@ -55,6 +55,9 @@
 		(project
 			? `${project.title}, a project of the CREATE Lab at George Mason University.`
 			: 'A project of the CREATE Lab at George Mason University.')}
+	image={project?.image || '/create_logo.png'}
+	url={page.url.href}
+	type="article"
 />
 
 <div class="mx-auto max-w-3xl px-4 py-12">

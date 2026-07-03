@@ -7,6 +7,7 @@
 	import FileList from '$lib/components/FileList.svelte';
 	import { cms } from '$lib/ts/cms';
 	import type { NewsEntry } from '$lib/ts/news';
+	import { formatDate } from '$lib/ts/dates';
 
 	let item = $state<NewsEntry | null>(null);
 	let loading = $state(true);
@@ -19,12 +20,6 @@
 
 	function isVideo(src: string): boolean {
 		return videoExtensions.test(src);
-	}
-
-	function formatDate(value: string): string {
-		const date = new Date(value);
-		if (Number.isNaN(date.getTime())) return value;
-		return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', timeZone: 'UTC' });
 	}
 
 	onMount(async () => {
@@ -42,6 +37,9 @@
 	title={item?.title ?? 'News'}
 	description={bodyPlain ||
 		'A news update from the CREATE Lab at George Mason University.'}
+	image={item?.gallery?.[0] || '/create_logo.png'}
+	url={page.url.href}
+	type="article"
 />
 
 <div class="mx-auto max-w-3xl px-4 py-12">

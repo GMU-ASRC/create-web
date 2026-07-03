@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page as pageState } from '$app/state';
 	import Seo from '$lib/components/Seo.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import ResearchCard from '$lib/components/ResearchCard.svelte';
@@ -32,6 +33,7 @@
 	brand="CREATE Lab"
 	title="Projects"
 	description="Projects from the CREATE Lab spanning swarm robotics, neuromorphic learning, autonomous coordination, and the control of spreading processes."
+	url={pageState.url.href}
 />
 
 <PageHero eyebrow="Projects" title="Our Projects" />
