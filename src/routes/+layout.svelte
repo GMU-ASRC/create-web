@@ -44,6 +44,7 @@
 		institution={info?.institution ?? ''}
 		tagline={info?.tagline ?? ''}
 		contact={info?.contact ?? null}
+		links={info?.links ?? []}
 		showAccessibility={info?.showAccessibility !== false}
 		{logo}
 	/>

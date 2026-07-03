@@ -9,6 +9,23 @@ export type SiteContact = {
 	email?: string;
 };
 
+export type SiteLink = {
+	href?: string;
+	icon?: string;
+};
+
+export function siteLinkIcon(link: SiteLink): string {
+	return link.icon?.trim() || 'mdi:link-variant';
+}
+
+export function siteLinkLabel(link: SiteLink): string {
+	try {
+		return new URL(link.href ?? '').hostname.replace(/^www\./, '');
+	} catch {
+		return link.href ?? '';
+	}
+}
+
 export type SiteFeatured = {
 	title?: string;
 	body?: string;
@@ -26,6 +43,7 @@ export type SiteInfo = {
 	intro?: string;
 	featuredProject?: SiteFeatured;
 	contact?: SiteContact;
+	links?: SiteLink[];
 	showAccessibility?: boolean;
 	alerts?: SiteAlert[];
 	highlights?: SiteHighlight[];
@@ -61,10 +79,11 @@ export const siteNav: NavLink[] = [
 	{ label: 'Home', path: '' },
 	{ label: 'Research', path: 'research' },
 	{ label: 'Projects', path: 'projects' },
-	{ label: 'Gallery', path: 'gallery' },
-	{ label: 'Team', path: 'team' },
 	{ label: 'Publications', path: 'publications' },
-	{ label: 'News', path: 'news' }
+	{ label: 'Team', path: 'team' },
+	{ label: 'News', path: 'news' },
+	{ label: 'Events', path: 'events' },
+	{ label: 'Gallery', path: 'gallery' }
 ];
 
 export const basePath = '';
