@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 	import Icon from '@iconify/svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import SectionHeading from '$lib/components/SectionHeading.svelte';
@@ -10,6 +11,7 @@
 	import { cms, resolveAsset, preloadImages } from '$lib/ts/cms';
 	import type { ResearchProject } from '$lib/ts/research';
 	import { newsLink, type NewsEntry } from '$lib/ts/news';
+	import { formatDate } from '$lib/ts/dates';
 	import type { Sponsor } from '$lib/ts/home';
 	import { highlightLocations, type SiteHighlight } from '$lib/ts/site';
 
@@ -28,6 +30,7 @@
 	let labTagline = $state('');
 	let labIntro = $state('');
 	let projects = $state<ResearchProject[]>([]);
+	let research = $state<ResearchProject[]>([]);
 	let sponsors = $state<Sponsor[]>([]);
 	let news = $state<NewsEntry[]>([]);
 	let highlights = $state<SiteHighlight[]>([]);
@@ -37,18 +40,14 @@
 			.sort((first, second) => Number(Boolean(second.featured)) - Number(Boolean(first.featured)))
 			.slice(0, 4)
 	);
+	const featuredResearch = $derived(research.slice(0, 3));
 	const recentNews = $derived(news.slice(0, 3));
 
-	function formatDate(value: string): string {
-		const date = new Date(value);
-		if (Number.isNaN(date.getTime())) return value;
-		return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', timeZone: 'UTC' });
-	}
-
 	onMount(async () => {
-		const [info, projectData, sponsorData, newsData] = await Promise.all([
+		const [info, projectData, articleData, sponsorData, newsData] = await Promise.all([
 			cms.siteInfo<SiteInfo>(),
 			cms.projects(),
+			cms.articles(),
 			cms.sponsors(),
 			cms.news()
 		]);
@@ -64,17 +63,29 @@
 			highlights = info.highlights ?? [];
 		}
 		projects = projectData ?? [];
+		research = (articleData ?? []).map((article) => {
+			const match = projects.find((project) => project.slug === article.slug);
+			return {
+				title: article.title,
+				author: article.author,
+				years: article.years,
+				slug: article.slug,
+				image: resolveAsset(article.image) || match?.image || '',
+				href: ''
+			};
+		});
 		sponsors = sponsorData ?? [];
 		news = newsData ?? [];
 		preloadImages([
 			...heroImages,
 			...projects.map((project) => project.image),
+			...research.map((article) => article.image),
 			...sponsors.map((sponsor) => sponsor.image)
 		]);
 	});
 </script>
 
-<Seo brand="CREATE Lab" title="Home" description={labIntro} />
+<Seo brand="CREATE Lab" title="Home" description={labIntro} image={labLogo} url={page.url.href} />
 
 <section class="relative isolate overflow-hidden bg-gmu-green text-white">
 	<div
@@ -128,9 +139,10 @@
 			/>
 			<a
 				href="/projects"
-				class="hidden shrink-0 text-sm font-medium text-gmu-green hover:underline sm:block"
+				class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
 			>
 				All projects
+				<Icon icon="mdi:arrow-right" width="16" />
 			</a>
 		</div>
 		{#if featuredProjects.length > 0}
@@ -143,15 +155,38 @@
 	</div>
 </section>
 
+{#if featuredResearch.length > 0}
+	<section class="bg-slate-100">
+		<div class="mx-auto max-w-7xl px-4 py-10">
+			<div class="flex items-end justify-between gap-4">
+				<SectionHeading eyebrow="Research" title="In-depth research" />
+				<a
+					href="/research"
+					class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
+				>
+					All research
+					<Icon icon="mdi:arrow-right" width="16" />
+				</a>
+			</div>
+			<div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+				{#each featuredResearch as article (article.title)}
+					<ResearchCard project={article} />
+				{/each}
+			</div>
+		</div>
+	</section>
+{/if}
+
 {#if recentNews.length > 0}
 <section class="mx-auto max-w-7xl px-4 py-10">
 	<div class="flex items-end justify-between gap-4">
 		<SectionHeading eyebrow="News" title="Latest updates" />
 		<a
 			href="/news"
-			class="hidden shrink-0 text-sm font-medium text-gmu-green hover:underline sm:block"
+			class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
 		>
 			All news
+			<Icon icon="mdi:arrow-right" width="16" />
 		</a>
 	</div>
 	<div class="mt-6 grid gap-6 md:grid-cols-3">
