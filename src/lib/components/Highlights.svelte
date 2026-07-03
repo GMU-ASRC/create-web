@@ -20,38 +20,58 @@
 
 {#if visible.length}
 	<div class="mx-auto max-w-7xl px-4">
-		<div class="my-6 space-y-4">
+		<div class="my-8 grid gap-5 {visible.length > 1 ? 'lg:grid-cols-2' : ''}">
 			{#each visible as highlight (highlight.title + (highlight.body ?? ''))}
-				<div
-					class="flex flex-col gap-4 rounded-xl border border-slate-200 border-l-4 border-l-gmu-gold bg-white p-5 shadow-sm sm:flex-row sm:items-center"
+				<svelte:element
+					this={highlight.link ? 'a' : 'div'}
+					href={highlight.link || undefined}
+					target={highlight.link ? '_blank' : undefined}
+					rel={highlight.link ? 'noopener noreferrer' : undefined}
+					class="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200/80 transition-all duration-300 hover:shadow-xl hover:ring-gmu-green/30 sm:flex-row {highlight.link
+						? 'hover:-translate-y-0.5'
+						: ''}"
 				>
+					<span
+						class="h-1.5 w-full shrink-0 bg-gradient-to-r from-gmu-gold to-gmu-green sm:h-auto sm:w-1.5 sm:bg-gradient-to-b"
+					></span>
+
 					{#if highlight.image}
-						<img
-							src={resolveAsset(highlight.image)}
-							alt=""
-							class="h-32 w-full rounded-lg object-cover sm:h-20 sm:w-32"
-						/>
+						<div class="shrink-0 overflow-hidden sm:w-44">
+							<img
+								src={resolveAsset(highlight.image)}
+								alt=""
+								class="h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105 sm:h-full"
+							/>
+						</div>
 					{/if}
-					<div class="min-w-0 flex-1">
-						{#if highlight.title}
-							<h3 class="font-semibold text-slate-900">{highlight.title}</h3>
-						{/if}
-						{#if highlight.body}
-							<p class="mt-1 text-sm text-slate-600">{highlight.body}</p>
-						{/if}
+
+					<div class="flex flex-1 items-center gap-5 p-6">
+						<div class="min-w-0 flex-1">
+							<p
+								class="mb-1.5 inline-flex items-center gap-1.5 text-[0.7rem] font-semibold tracking-[0.14em] text-gmu-green uppercase"
+							>
+								<Icon icon="mdi:star-four-points" width="12" class="text-gmu-gold" />
+								Highlight
+							</p>
+							{#if highlight.title}
+								<h3 class="text-lg leading-snug font-bold text-slate-900 sm:text-xl">
+									{highlight.title}
+								</h3>
+							{/if}
+							{#if highlight.body}
+								<p class="mt-1.5 line-clamp-3 text-sm text-slate-600">{highlight.body}</p>
+							{/if}
+							{#if highlight.link}
+								<span
+									class="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-gmu-green transition-all group-hover:gap-2.5"
+								>
+									{highlight.linkText || 'Learn more'}
+									<Icon icon="mdi:arrow-right" width="16" />
+								</span>
+							{/if}
+						</div>
 					</div>
-					{#if highlight.link}
-						<a
-							href={highlight.link}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-gmu-green px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-gmu-green-dark"
-						>
-							{highlight.linkText || 'Learn more'}
-							<Icon icon="mdi:arrow-right" width="16" />
-						</a>
-					{/if}
-				</div>
+				</svelte:element>
 			{/each}
 		</div>
 	</div>
