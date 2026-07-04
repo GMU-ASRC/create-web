@@ -161,7 +161,8 @@
 					class="mx-auto max-h-[85vh] w-auto rounded-lg"
 				></video>
 			{:else}
-				<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
+				<!-- svelte-ignore a11y_click_events_have_key_events -->
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<img
 					src={current.image}
 					alt={current.title ?? ''}
