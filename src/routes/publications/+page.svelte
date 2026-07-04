@@ -6,6 +6,7 @@
 	import PageHero from '$lib/components/PageHero.svelte';
 	import PublicationList from '$lib/components/PublicationList.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
+	import SkeletonGrid from '$lib/components/SkeletonGrid.svelte';
 	import { cms } from '$lib/ts/cms';
 	import type { Publication, PublicationSection } from '$lib/ts/publications';
 
@@ -61,8 +62,10 @@
 <PageHero eyebrow="Publications" title="Publications" />
 
 <section class="mx-auto max-w-5xl space-y-8 px-4 py-16">
-	{#if loading || sections.length === 0}
-		<LoadState {loading} empty="No publications yet." />
+	{#if loading}
+		<SkeletonGrid variant="list" count={6} />
+	{:else if sections.length === 0}
+		<LoadState loading={false} empty="No publications yet." />
 	{:else}
 		<div class="space-y-4">
 			<div class="relative">

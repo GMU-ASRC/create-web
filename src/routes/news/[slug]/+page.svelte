@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
+	import Img from '$lib/components/Img.svelte';
 	import { page } from '$app/state';
 	import Seo from '$lib/components/Seo.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
@@ -82,7 +83,7 @@
 								class="aspect-square w-full rounded-lg border border-slate-200 bg-slate-900 object-cover"
 							></video>
 						{:else}
-							<img
+							<Img
 								{src}
 								alt=""
 								class="aspect-square w-full rounded-lg border border-slate-200 object-cover"

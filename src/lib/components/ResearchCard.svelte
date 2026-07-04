@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import Img from '$lib/components/Img.svelte';
 	import { projectLink, type ResearchProject } from '$lib/ts/research';
 	import { basePath } from '$lib/ts/site';
 
@@ -30,10 +31,10 @@
 		: 'scale-x-0 group-hover:scale-x-100'}"></div>
 	<div class="aspect-video overflow-hidden bg-gmu-green-light">
 		{#if project.image}
-			<img
+			<Img
 				src={project.image}
 				alt={project.title}
-				class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+				class="h-full w-full object-cover group-hover:scale-105"
 			/>
 		{:else}
 			<div class="flex h-full w-full items-center justify-center text-gmu-green/40">

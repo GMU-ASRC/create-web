@@ -5,6 +5,8 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
+	import SkeletonGrid from '$lib/components/SkeletonGrid.svelte';
+	import Img from '$lib/components/Img.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import { cms, preloadImages } from '$lib/ts/cms';
 	import {
@@ -45,8 +47,10 @@
 
 <section class="bg-slate-100">
 	<div class="mx-auto max-w-7xl px-4 py-16">
-		{#if loading || events.length === 0}
-			<LoadState {loading} empty="No events yet." />
+		{#if loading}
+			<SkeletonGrid variant="card" count={6} />
+		{:else if events.length === 0}
+			<LoadState loading={false} empty="No events yet." />
 		{:else}
 			<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 				{#each visible as event (event.slug || event.id || event.title)}
@@ -61,10 +65,10 @@
 						<div class="h-1.5 w-full origin-left bg-gmu-gold transition-transform duration-300 scale-x-0 group-hover:scale-x-100"></div>
 						<div class="aspect-video overflow-hidden bg-gmu-green-light">
 							{#if event.image}
-								<img
+								<Img
 									src={event.image}
 									alt={event.title}
-									class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+									class="h-full w-full object-cover group-hover:scale-105"
 								/>
 							{:else}
 								<div class="flex h-full w-full items-center justify-center text-gmu-green/40">

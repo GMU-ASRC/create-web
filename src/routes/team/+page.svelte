@@ -6,6 +6,8 @@
 	import PageHero from '$lib/components/PageHero.svelte';
 	import TeamGroup from '$lib/components/TeamGroup.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
+	import SkeletonGrid from '$lib/components/SkeletonGrid.svelte';
+	import Img from '$lib/components/Img.svelte';
 	import EducationList from '$lib/components/EducationList.svelte';
 	import { socialIcon, socialLabel } from '$lib/ts/socialIcons';
 	import { cms, preloadImages } from '$lib/ts/cms';
@@ -40,15 +42,28 @@
 
 <section class="bg-slate-100">
 	<div class="mx-auto max-w-7xl px-4 py-16">
-		{#if loading || !professor}
-			<LoadState {loading} empty="No team members yet." />
+		{#if loading}
+			<div class="flex flex-col gap-6 border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center">
+				<div class="h-40 w-40 shrink-0 animate-pulse bg-slate-200"></div>
+				<div class="flex flex-1 flex-col gap-3">
+					<div class="h-3 w-20 animate-pulse rounded bg-slate-200"></div>
+					<div class="h-6 w-1/2 animate-pulse rounded bg-slate-200"></div>
+					<div class="h-3 w-1/3 animate-pulse rounded bg-slate-200"></div>
+					<div class="h-3 w-2/5 animate-pulse rounded bg-slate-200"></div>
+				</div>
+			</div>
+			<div class="mt-14">
+				<SkeletonGrid variant="person" count={8} grid="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" />
+			</div>
+		{:else if !professor}
+			<LoadState loading={false} empty="No team members yet." />
 		{:else}
 			<div class="flex flex-col gap-6 border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center">
 				<a href={`/team/${professor.slug || professor.id}`} class="group flex-shrink-0">
-					<img
+					<Img
 						src={memberPhoto(professor.photo)}
 						alt={professor.name}
-						class="h-40 w-40 object-cover transition-transform duration-300 group-hover:scale-105"
+						class="h-40 w-40 object-cover group-hover:scale-105"
 					/>
 				</a>
 				<div>

@@ -6,6 +6,7 @@
 	import SectionHeading from '$lib/components/SectionHeading.svelte';
 	import ResearchCard from '$lib/components/ResearchCard.svelte';
 	import SponsorGrid from '$lib/components/SponsorGrid.svelte';
+	import SkeletonGrid from '$lib/components/SkeletonGrid.svelte';
 	import HeroShowcase from '$lib/components/HeroShowcase.svelte';
 	import Highlights from '$lib/components/Highlights.svelte';
 	import { cms, resolveAsset, preloadImages } from '$lib/ts/cms';
@@ -34,6 +35,7 @@
 	let sponsors = $state<Sponsor[]>([]);
 	let news = $state<NewsEntry[]>([]);
 	let highlights = $state<SiteHighlight[]>([]);
+	let loading = $state(true);
 
 	const featuredProjects = $derived(
 		[...projects]
@@ -82,6 +84,7 @@
 			...research.map((article) => article.image),
 			...sponsors.map((sponsor) => sponsor.image)
 		]);
+		loading = false;
 	});
 </script>
 
@@ -145,7 +148,11 @@
 				<Icon icon="mdi:arrow-right" width="16" />
 			</a>
 		</div>
-		{#if featuredProjects.length > 0}
+		{#if loading}
+			<div class="mt-6">
+				<SkeletonGrid variant="card" count={4} grid="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" />
+			</div>
+		{:else if featuredProjects.length > 0}
 			<div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				{#each featuredProjects as project (project.title)}
 					<ResearchCard {project} featured={Boolean(project.featured)} />

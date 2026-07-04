@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import Img from '$lib/components/Img.svelte';
 	import { memberPhoto, type Member } from '$lib/ts/group';
 	import EducationList from '$lib/components/EducationList.svelte';
 	import { socialIcon, socialLabel } from '$lib/ts/socialIcons';
@@ -13,7 +14,7 @@
 	<div class="h-1.5 w-full origin-left scale-x-0 bg-gmu-gold transition-transform duration-300 group-hover:scale-x-100"></div>
 	<a {href} class="flex flex-1 flex-col">
 		<div class="aspect-square overflow-hidden bg-gmu-green-light">
-			<img src={memberPhoto(member.photo)} alt={member.name} class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+			<Img src={memberPhoto(member.photo)} alt={member.name} class="h-full w-full object-cover group-hover:scale-105" />
 		</div>
 		<div class="flex flex-1 flex-col p-4">
 			<h3 class="font-semibold text-slate-900 group-hover:text-gmu-green">{member.name}</h3>

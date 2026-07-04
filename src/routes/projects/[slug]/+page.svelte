@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
+	import Img from '$lib/components/Img.svelte';
 	import { page } from '$app/state';
 	import Seo from '$lib/components/Seo.svelte';
 	import PublicationList from '$lib/components/PublicationList.svelte';
@@ -96,7 +97,7 @@
 		{/if}
 
 		{#if project.image}
-			<img
+			<Img
 				src={project.image}
 				alt={project.title}
 				class="mt-8 max-h-[32rem] w-full rounded-lg border border-slate-200 bg-slate-50 object-contain"

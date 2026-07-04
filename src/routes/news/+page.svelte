@@ -5,6 +5,7 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
+	import SkeletonGrid from '$lib/components/SkeletonGrid.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import { cms } from '$lib/ts/cms';
 	import { newsLink, type NewsEntry } from '$lib/ts/news';
@@ -35,8 +36,10 @@
 <PageHero eyebrow="News" title="News and Updates" />
 
 <section class="mx-auto max-w-4xl px-4 py-16">
-	{#if loading || news.length === 0}
-		<LoadState {loading} empty="No news yet." />
+	{#if loading}
+		<SkeletonGrid variant="list" count={6} />
+	{:else if news.length === 0}
+		<LoadState loading={false} empty="No news yet." />
 	{:else}
 		<ul class="divide-y divide-slate-200 border-y border-slate-200">
 			{#each visible as item (item.title + item.date)}

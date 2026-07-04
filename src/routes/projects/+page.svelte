@@ -5,6 +5,7 @@
 	import PageHero from '$lib/components/PageHero.svelte';
 	import ResearchCard from '$lib/components/ResearchCard.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
+	import SkeletonGrid from '$lib/components/SkeletonGrid.svelte';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import { cms, preloadImages } from '$lib/ts/cms';
 	import type { ResearchProject } from '$lib/ts/research';
@@ -40,8 +41,10 @@
 
 <section class="bg-slate-100">
 	<div class="mx-auto max-w-7xl px-4 py-16">
-		{#if loading || projects.length === 0}
-			<LoadState {loading} empty="No projects yet." />
+		{#if loading}
+			<SkeletonGrid variant="card" count={8} grid="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" />
+		{:else if projects.length === 0}
+			<LoadState loading={false} empty="No projects yet." />
 		{:else}
 			<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
 				{#each visible as project (project.title)}

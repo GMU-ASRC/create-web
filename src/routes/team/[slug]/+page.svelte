@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
+	import Img from '$lib/components/Img.svelte';
 	import { page } from '$app/state';
 	import Seo from '$lib/components/Seo.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
@@ -85,7 +86,7 @@
 		<div class="mt-8 flex flex-col gap-8 sm:flex-row">
 			<div class="flex-shrink-0">
 				<div class="h-1.5 w-full bg-gmu-gold"></div>
-				<img src={memberPhoto(member.photo)} alt={member.name} class="h-56 w-56 object-cover" />
+				<Img src={memberPhoto(member.photo)} alt={member.name} class="h-56 w-56 object-cover" />
 			</div>
 			<div>
 				<p class="text-xs font-semibold tracking-widest text-gmu-green uppercase">{label}</p>
