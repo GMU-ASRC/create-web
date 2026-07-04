@@ -12,6 +12,13 @@
 	import { cms, resolveAsset, preloadImages } from '$lib/ts/cms';
 	import type { ResearchProject } from '$lib/ts/research';
 	import { newsLink, type NewsEntry } from '$lib/ts/news';
+	import {
+		eventLink,
+		eventStatus,
+		eventStatusClass,
+		formatEventRange,
+		type EventEntry
+	} from '$lib/ts/events';
 	import { formatDate } from '$lib/ts/dates';
 	import type { Sponsor } from '$lib/ts/home';
 	import { highlightLocations, type SiteHighlight } from '$lib/ts/site';
@@ -34,24 +41,32 @@
 	let research = $state<ResearchProject[]>([]);
 	let sponsors = $state<Sponsor[]>([]);
 	let news = $state<NewsEntry[]>([]);
+	let events = $state<EventEntry[]>([]);
 	let highlights = $state<SiteHighlight[]>([]);
 	let loading = $state(true);
 
 	const featuredProjects = $derived(
 		[...projects]
 			.sort((first, second) => Number(Boolean(second.featured)) - Number(Boolean(first.featured)))
-			.slice(0, 4)
+			.slice(0, 3)
 	);
 	const featuredResearch = $derived(research.slice(0, 3));
-	const recentNews = $derived(news.slice(0, 3));
+	const panelNews = $derived(news.slice(0, 5));
+	const panelEvents = $derived.by(() => {
+		const upcoming = events
+			.filter((event) => eventStatus(event) !== 'Past')
+			.sort((first, second) => (first.date < second.date ? -1 : first.date > second.date ? 1 : 0));
+		return (upcoming.length ? upcoming : events).slice(0, 5);
+	});
 
 	onMount(async () => {
-		const [info, projectData, articleData, sponsorData, newsData] = await Promise.all([
+		const [info, projectData, articleData, sponsorData, newsData, eventData] = await Promise.all([
 			cms.siteInfo<SiteInfo>(),
 			cms.projects(),
 			cms.articles(),
 			cms.sponsors(),
-			cms.news()
+			cms.news(),
+			cms.events()
 		]);
 		if (info) {
 			labLogo = resolveAsset(info.logo) || '/create_logo.png';
@@ -78,6 +93,7 @@
 		});
 		sponsors = sponsorData ?? [];
 		news = newsData ?? [];
+		events = eventData ?? [];
 		preloadImages([
 			...heroImages,
 			...projects.map((project) => project.image),
@@ -134,93 +150,161 @@
 <Highlights {highlights} location={highlightLocations.homeHero} />
 
 <section class="bg-slate-100">
-	<div class="mx-auto max-w-7xl px-4 py-10">
-		<div class="flex items-end justify-between gap-4">
-			<SectionHeading
-				eyebrow="Projects"
-				title="What we work on"
-			/>
-			<a
-				href="/projects"
-				class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
-			>
-				All projects
-				<Icon icon="mdi:arrow-right" width="16" />
-			</a>
-		</div>
-		{#if loading}
-			<div class="mt-6">
-				<SkeletonGrid variant="card" count={4} grid="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" />
-			</div>
-		{:else if featuredProjects.length > 0}
-			<div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-				{#each featuredProjects as project (project.title)}
-					<ResearchCard {project} featured={Boolean(project.featured)} />
-				{/each}
-			</div>
-		{/if}
-	</div>
-</section>
-
-{#if featuredResearch.length > 0}
-	<section class="bg-slate-100">
-		<div class="mx-auto max-w-7xl px-4 py-10">
-			<div class="flex items-end justify-between gap-4">
-				<SectionHeading eyebrow="Research" title="In-depth research" />
-				<a
-					href="/research"
-					class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
-				>
-					All research
-					<Icon icon="mdi:arrow-right" width="16" />
-				</a>
-			</div>
-			<div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-				{#each featuredResearch as article (article.title)}
-					<ResearchCard project={article} />
-				{/each}
-			</div>
-		</div>
-	</section>
-{/if}
-
-{#if recentNews.length > 0}
-<section class="mx-auto max-w-7xl px-4 py-10">
-	<div class="flex items-end justify-between gap-4">
-		<SectionHeading eyebrow="News" title="Latest updates" />
-		<a
-			href="/news"
-			class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
-		>
-			All news
-			<Icon icon="mdi:arrow-right" width="16" />
-		</a>
-	</div>
-	<div class="mt-6 grid gap-6 md:grid-cols-3">
-		{#each recentNews as item (item.title + item.date)}
-			{@const link = newsLink(item, '/news')}
-			<article class="flex flex-col border border-slate-200 border-l-4 border-l-gmu-gold bg-white p-5 shadow-sm transition-colors hover:border-gmu-green hover:border-l-gmu-gold">
-				<p class="font-mono text-xs text-gmu-green">{formatDate(item.date)}</p>
-				<h3 class="mt-2 font-semibold text-slate-900">{item.title}</h3>
-				{#if item.author}
-					<p class="mt-0.5 text-xs font-medium text-slate-500">By {item.author}</p>
-				{/if}
-				{#if link}
+	<div class="grid w-full gap-8 px-6 py-10 lg:grid-cols-4 lg:px-12">
+		<div class="space-y-12 lg:col-span-3">
+			<div>
+				<div class="flex items-end justify-between gap-4">
+					<SectionHeading eyebrow="Projects" title="What we work on" />
 					<a
-						href={link.href}
-						target={link.external ? '_blank' : undefined}
-						rel={link.external ? 'noopener noreferrer' : undefined}
-						class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-gmu-green hover:underline"
+						href="/projects"
+						class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
 					>
-						Read more
+						All projects
 						<Icon icon="mdi:arrow-right" width="16" />
 					</a>
+				</div>
+				{#if loading}
+					<div class="mt-6">
+						<SkeletonGrid variant="card" count={3} grid="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" />
+					</div>
+				{:else if featuredProjects.length > 0}
+					<div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+						{#each featuredProjects as project (project.title)}
+							<ResearchCard {project} featured={Boolean(project.featured)} />
+						{/each}
+					</div>
 				{/if}
-			</article>
-		{/each}
+			</div>
+
+			<div>
+				<div class="flex items-end justify-between gap-4">
+					<SectionHeading eyebrow="Research" title="In-depth research" />
+					<a
+						href="/research"
+						class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
+					>
+						All research
+						<Icon icon="mdi:arrow-right" width="16" />
+					</a>
+				</div>
+				{#if loading}
+					<div class="mt-6">
+						<SkeletonGrid variant="card" count={3} grid="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" />
+					</div>
+				{:else if featuredResearch.length > 0}
+					<div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+						{#each featuredResearch as article (article.title)}
+							<ResearchCard project={article} />
+						{/each}
+					</div>
+				{:else}
+					<p class="mt-6 text-sm text-slate-500">No research articles yet.</p>
+				{/if}
+			</div>
+		</div>
+
+		<aside class="flex flex-col gap-6">
+			<div class="border border-slate-200 bg-white shadow-sm">
+				<div class="flex items-center justify-between border-b border-slate-100 px-5 py-3.5">
+					<h3 class="flex items-center gap-2 font-mono text-sm font-bold tracking-wide text-gmu-green uppercase">
+						<Icon icon="mdi:newspaper-variant-outline" width="18" />
+						Latest News
+					</h3>
+					<a href="/news" class="inline-flex items-center gap-1 text-xs font-medium text-gmu-green hover:underline">
+						All
+						<Icon icon="mdi:arrow-right" width="14" />
+					</a>
+				</div>
+				{#if loading}
+					<div class="space-y-3 px-5 py-4">
+						{#each Array(3) as _, index (index)}
+							<div class="h-3 w-1/3 animate-pulse rounded bg-slate-200"></div>
+							<div class="h-4 w-full animate-pulse rounded bg-slate-200"></div>
+						{/each}
+					</div>
+				{:else if panelNews.length > 0}
+					<ul class="divide-y divide-slate-100">
+						{#each panelNews as item (item.title + item.date)}
+							{@const link = newsLink(item, '/news')}
+							<li>
+								<a
+									href={link ? link.href : '/news'}
+									target={link?.external ? '_blank' : undefined}
+									rel={link?.external ? 'noopener noreferrer' : undefined}
+									class="group block px-5 py-3 transition-colors hover:bg-slate-50"
+								>
+									<p class="font-mono text-[11px] text-gmu-green">{formatDate(item.date)}</p>
+									<p class="mt-0.5 line-clamp-2 text-sm font-semibold text-slate-900 group-hover:text-gmu-green">
+										{item.title}
+									</p>
+									{#if item.author}
+										<p class="mt-0.5 text-xs text-slate-500">By {item.author}</p>
+									{/if}
+								</a>
+							</li>
+						{/each}
+					</ul>
+				{:else}
+					<p class="px-5 py-4 text-sm text-slate-500">No news yet.</p>
+				{/if}
+			</div>
+
+			<div class="border border-slate-200 bg-white shadow-sm">
+				<div class="flex items-center justify-between border-b border-slate-100 px-5 py-3.5">
+					<h3 class="flex items-center gap-2 font-mono text-sm font-bold tracking-wide text-gmu-green uppercase">
+						<Icon icon="mdi:calendar-star" width="18" />
+						Events
+					</h3>
+					<a href="/events" class="inline-flex items-center gap-1 text-xs font-medium text-gmu-green hover:underline">
+						All
+						<Icon icon="mdi:arrow-right" width="14" />
+					</a>
+				</div>
+				{#if loading}
+					<div class="space-y-3 px-5 py-4">
+						{#each Array(3) as _, index (index)}
+							<div class="h-3 w-1/2 animate-pulse rounded bg-slate-200"></div>
+							<div class="h-4 w-full animate-pulse rounded bg-slate-200"></div>
+						{/each}
+					</div>
+				{:else if panelEvents.length > 0}
+					<ul class="divide-y divide-slate-100">
+						{#each panelEvents as event (event.slug || event.id || event.title)}
+							{@const elink = eventLink(event)}
+							{@const status = eventStatus(event)}
+							<li>
+								<a
+									href={elink.href}
+									target={elink.external ? '_blank' : undefined}
+									rel={elink.external ? 'noopener noreferrer' : undefined}
+									class="group block px-5 py-3 transition-colors hover:bg-slate-50"
+								>
+									<div class="flex items-center gap-2">
+										<span class="font-mono text-[11px] text-gmu-green">{formatEventRange(event.date, event.endDate)}</span>
+										<span class="rounded-full px-1.5 py-0.5 text-[10px] font-medium {eventStatusClass(status)}">
+											{status}
+										</span>
+									</div>
+									<p class="mt-0.5 line-clamp-2 text-sm font-semibold text-slate-900 group-hover:text-gmu-green">
+										{event.title}
+									</p>
+									{#if event.location}
+										<p class="mt-0.5 inline-flex items-center gap-1 text-xs text-slate-500">
+											<Icon icon="mdi:map-marker-outline" width="12" />
+											{event.location}
+										</p>
+									{/if}
+								</a>
+							</li>
+						{/each}
+					</ul>
+				{:else}
+					<p class="px-5 py-4 text-sm text-slate-500">No upcoming events.</p>
+				{/if}
+			</div>
+		</aside>
 	</div>
 </section>
-{/if}
 
 {#if sponsors.length > 0}
 	<section class="bg-gmu-green-light">
