@@ -41,7 +41,7 @@
 		]);
 		if (data) {
 			const everyone = [
-				{ member: data.professor, label: 'Professor' },
+				{ member: data.professor, label: data.professor.group || 'Professor' },
 				...data.groups.flatMap((group) =>
 					group.members.map((person) => ({ member: person, label: group.heading }))
 				)

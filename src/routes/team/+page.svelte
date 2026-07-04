@@ -67,7 +67,7 @@
 					/>
 				</a>
 				<div>
-					<p class="text-xs font-semibold tracking-widest text-gmu-green uppercase">Professor</p>
+					<p class="text-xs font-semibold tracking-widest text-gmu-green uppercase">{professor.group || 'Professor'}</p>
 					<a href={`/team/${professor.slug || professor.id}`}>
 						<h2 class="mt-1 text-2xl font-bold text-slate-900 hover:text-gmu-green">{professor.name}</h2>
 					</a>
