@@ -8,12 +8,14 @@
 	let scaleIndex = $state(1);
 	let highContrast = $state(false);
 	let reduceMotion = $state(false);
+	let darkMode = $state(false);
 
 	onMount(() => {
 		const savedScale = scales.indexOf(Number(localStorage.getItem('a11y-font-scale')));
 		if (savedScale !== -1) scaleIndex = savedScale;
 		highContrast = localStorage.getItem('a11y-contrast') === '1';
 		reduceMotion = localStorage.getItem('a11y-reduce-motion') === '1';
+		darkMode = localStorage.getItem('a11y-dark') === '1';
 		apply();
 	});
 
@@ -23,6 +25,7 @@
 		root.style.fontSize = `${scales[scaleIndex] * 100}%`;
 		root.classList.toggle('a11y-contrast', highContrast);
 		root.classList.toggle('a11y-reduce-motion', reduceMotion);
+		root.classList.toggle('a11y-dark', darkMode);
 	}
 
 	function setScale(index: number) {
@@ -40,6 +43,12 @@
 	function toggleMotion() {
 		reduceMotion = !reduceMotion;
 		localStorage.setItem('a11y-reduce-motion', reduceMotion ? '1' : '0');
+		apply();
+	}
+
+	function toggleDark() {
+		darkMode = !darkMode;
+		localStorage.setItem('a11y-dark', darkMode ? '1' : '0');
 		apply();
 	}
 
@@ -84,6 +93,18 @@
 			</button>
 		</div>
 	</div>
+
+	<button
+		type="button"
+		onclick={toggleDark}
+		aria-pressed={darkMode}
+		class="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1 text-sm transition-colors {darkMode
+			? toggleActive
+			: toggleIdle}"
+	>
+		<Icon icon={darkMode ? 'mdi:weather-night' : 'mdi:weather-sunny'} width="16" />
+		Dark mode
+	</button>
 
 	<button
 		type="button"

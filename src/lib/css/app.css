@@ -115,3 +115,95 @@ html.a11y-contrast .text-white\/85,
 html.a11y-contrast .text-white\/90 {
 	color: #ffffff !important;
 }
+
+/* Dark mode */
+html.a11y-dark {
+	color-scheme: dark;
+}
+html.a11y-dark body {
+	background-color: #09090b;
+	color: #e4e4e7;
+}
+html.a11y-dark .bg-white {
+	background-color: #27272a !important;
+}
+html.a11y-dark .bg-white\/90 {
+	background-color: rgba(39, 39, 42, 0.9) !important;
+}
+html.a11y-dark .bg-slate-50 {
+	background-color: #27272a !important;
+}
+html.a11y-dark .bg-slate-100 {
+	background-color: #18181b !important;
+}
+html.a11y-dark .bg-slate-200 {
+	background-color: #3f3f46 !important;
+}
+html.a11y-dark .text-slate-900 {
+	color: #fafafa !important;
+}
+html.a11y-dark .text-slate-800 {
+	color: #f4f4f5 !important;
+}
+html.a11y-dark .text-slate-700 {
+	color: #e4e4e7 !important;
+}
+html.a11y-dark .text-slate-600 {
+	color: #d4d4d8 !important;
+}
+html.a11y-dark .text-slate-500 {
+	color: #a1a1aa !important;
+}
+html.a11y-dark .text-slate-400 {
+	color: #71717a !important;
+}
+html.a11y-dark .text-gmu-green {
+	color: #4cc088 !important;
+}
+html.a11y-dark .bg-gmu-gold {
+	background-color: #d9a520 !important;
+}
+html.a11y-dark .text-gmu-gold {
+	color: #d9a520 !important;
+}
+html.a11y-dark .border-gmu-gold {
+	border-color: #d9a520 !important;
+}
+html.a11y-dark .bg-gmu-green {
+	background-color: #003d20 !important;
+}
+html.a11y-dark .bg-gmu-green-light {
+	background-color: #0d2a1e !important;
+}
+html.a11y-dark .bg-gmu-green-light .bg-white {
+	background-color: #14382a !important;
+}
+html.a11y-dark .border-slate-200 {
+	border-color: #3f3f46 !important;
+}
+html.a11y-dark .border-slate-300 {
+	border-color: #52525b !important;
+}
+html.a11y-dark .border-slate-100 {
+	border-color: #27272a !important;
+}
+html.a11y-dark .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+html.a11y-dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+	border-color: #27272a !important;
+}
+html.a11y-dark .hover\:bg-slate-50:hover {
+	background-color: #3f3f46 !important;
+}
+html.a11y-dark .hover\:bg-slate-100:hover {
+	background-color: #27272a !important;
+}
+html.a11y-dark .placeholder\:text-slate-400::placeholder {
+	color: #71717a !important;
+}
+html.a11y-dark .rich-content {
+	color: #d4d4d8;
+}
+html.a11y-dark .rich-content h1,
+html.a11y-dark .rich-content h2 {
+	color: #fafafa;
+}
