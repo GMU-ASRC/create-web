@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import Img from '$lib/components/Img.svelte';
 
 	let { items = [] }: { items?: string[] } = $props();
 
@@ -8,19 +9,39 @@
 
 	const videoExtensions = /\.(mp4|webm|ogg|ogv|mov|m4v)$/i;
 
+	const zoomSteps = [1, 2, 3];
+	let zoomIndex = $state(0);
+	let zoomOrigin = $state('center center');
+	const zoomScale = $derived(zoomSteps[zoomIndex]);
+
 	function isVideo(src: string): boolean {
 		return videoExtensions.test(src);
 	}
 
+	function zoomAt(event: MouseEvent) {
+		event.stopPropagation();
+		const img = event.currentTarget as HTMLImageElement;
+		const rect = img.getBoundingClientRect();
+		zoomOrigin = `${((event.clientX - rect.left) / rect.width) * 100}% ${((event.clientY - rect.top) / rect.height) * 100}%`;
+		zoomIndex = (zoomIndex + 1) % zoomSteps.length;
+	}
+	function resetZoom() {
+		zoomIndex = 0;
+		zoomOrigin = 'center center';
+	}
+
 	function open(index: number) {
 		lightbox = index;
+		resetZoom();
 	}
 	function close() {
 		lightbox = null;
+		resetZoom();
 	}
 	function step(delta: number) {
 		if (lightbox === null) return;
 		lightbox = (lightbox + delta + items.length) % items.length;
+		resetZoom();
 	}
 	function onKeydown(event: KeyboardEvent) {
 		if (lightbox === null) return;
@@ -50,11 +71,11 @@
 					<Icon icon="mdi:play-circle-outline" width="44" />
 				</span>
 			{:else}
-				<img
+				<Img
 					{src}
 					alt=""
 					loading="lazy"
-					class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+					class="h-full w-full object-cover group-hover:scale-105"
 				/>
 				<span
 					class="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-900/0 text-white opacity-0 transition group-hover:bg-slate-900/30 group-hover:opacity-100"
@@ -96,12 +117,22 @@
 				<Icon icon="mdi:chevron-right" width="40" />
 			</button>
 		{/if}
-		<div class="relative z-10 max-w-4xl">
+		<div class="relative z-10 flex max-w-4xl items-center justify-center overflow-hidden">
 			{#if isVideo(current)}
 				<!-- svelte-ignore a11y_media_has_caption -->
 				<video src={current} controls autoplay class="mx-auto max-h-[85vh] w-auto rounded-lg"></video>
 			{:else}
-				<img src={current} alt="" class="mx-auto max-h-[85vh] w-auto rounded-lg" />
+				<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
+				<img
+					src={current}
+					alt=""
+					onclick={zoomAt}
+					style="transform: scale({zoomScale}); transform-origin: {zoomOrigin};"
+					class="max-h-[85vh] w-auto rounded-lg transition-transform duration-200 {zoomIndex ===
+					zoomSteps.length - 1
+						? 'cursor-zoom-out'
+						: 'cursor-zoom-in'}"
+				/>
 			{/if}
 		</div>
 	</div>

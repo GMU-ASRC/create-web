@@ -5,6 +5,8 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import LoadState from '$lib/components/LoadState.svelte';
+	import SkeletonGrid from '$lib/components/SkeletonGrid.svelte';
+	import Img from '$lib/components/Img.svelte';
 	import { cms, preloadImages } from '$lib/ts/cms';
 	import type { GalleryItem } from '$lib/ts/gallery';
 
@@ -27,15 +29,35 @@
 		loading = false;
 	});
 
+	const zoomSteps = [1, 2, 3];
+	let zoomIndex = $state(0);
+	let zoomOrigin = $state('center center');
+	const zoomScale = $derived(zoomSteps[zoomIndex]);
+
+	function zoomAt(event: MouseEvent) {
+		event.stopPropagation();
+		const img = event.currentTarget as HTMLImageElement;
+		const rect = img.getBoundingClientRect();
+		zoomOrigin = `${((event.clientX - rect.left) / rect.width) * 100}% ${((event.clientY - rect.top) / rect.height) * 100}%`;
+		zoomIndex = (zoomIndex + 1) % zoomSteps.length;
+	}
+	function resetZoom() {
+		zoomIndex = 0;
+		zoomOrigin = 'center center';
+	}
+
 	function open(index: number) {
 		lightbox = index;
+		resetZoom();
 	}
 	function close() {
 		lightbox = null;
+		resetZoom();
 	}
 	function step(delta: number) {
 		if (lightbox === null) return;
 		lightbox = (lightbox + delta + items.length) % items.length;
+		resetZoom();
 	}
 	function onKeydown(event: KeyboardEvent) {
 		if (lightbox === null) return;
@@ -57,8 +79,10 @@
 <PageHero eyebrow="Gallery" title="Gallery" />
 
 <section class="mx-auto max-w-7xl px-4 py-16">
-	{#if loading || items.length === 0}
-		<LoadState {loading} empty="No gallery images yet." />
+	{#if loading}
+		<SkeletonGrid variant="gallery" count={8} grid="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4" />
+	{:else if items.length === 0}
+		<LoadState loading={false} empty="No gallery images yet." />
 	{:else}
 		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
 			{#each items as item, index (index)}
@@ -78,11 +102,11 @@
 							<Icon icon="mdi:play-circle-outline" width="48" />
 						</span>
 					{:else}
-						<img
+						<Img
 							src={item.image}
 							alt={item.title ?? ''}
 							loading="lazy"
-							class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+							class="h-full w-full object-cover group-hover:scale-105"
 						/>
 					{/if}
 					{#if item.title}
@@ -127,7 +151,7 @@
 				<Icon icon="mdi:chevron-right" width="40" />
 			</button>
 		{/if}
-		<figure class="relative z-10 max-w-4xl">
+		<figure class="relative z-10 flex max-w-4xl flex-col items-center overflow-hidden">
 			{#if isVideo(current)}
 				<!-- svelte-ignore a11y_media_has_caption -->
 				<video
@@ -137,7 +161,17 @@
 					class="mx-auto max-h-[85vh] w-auto rounded-lg"
 				></video>
 			{:else}
-				<img src={current.image} alt={current.title ?? ''} class="mx-auto max-h-[85vh] w-auto rounded-lg" />
+				<!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
+				<img
+					src={current.image}
+					alt={current.title ?? ''}
+					onclick={zoomAt}
+					style="transform: scale({zoomScale}); transform-origin: {zoomOrigin};"
+					class="max-h-[85vh] w-auto rounded-lg transition-transform duration-200 {zoomIndex ===
+					zoomSteps.length - 1
+						? 'cursor-zoom-out'
+						: 'cursor-zoom-in'}"
+				/>
 			{/if}
 			{#if current.title}
 				<figcaption class="mt-3 text-center text-sm text-white/80">{current.title}</figcaption>
