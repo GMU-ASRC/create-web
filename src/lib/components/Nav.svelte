@@ -21,7 +21,6 @@
 </script>
 
 <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-	<div class="h-1 w-full bg-gmu-green"></div>
 	<nav class="flex w-full items-center justify-between px-6 py-4 lg:px-12">
 		<a href={homeHref} class="flex items-center gap-2">
 			<img src={logo} alt="" class="h-9 w-auto" />
