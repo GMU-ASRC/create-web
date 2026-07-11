@@ -67,6 +67,20 @@ export function eventStatus(event: EventEntry): EventStatus {
 	return 'Ongoing';
 }
 
+function timeValue(event: EventEntry): number {
+	const time = Date.parse(event.date ?? '');
+	return Number.isNaN(time) ? Number.POSITIVE_INFINITY : time;
+}
+
+export function compareEvents(first: EventEntry, second: EventEntry): number {
+	const firstPast = eventStatus(first) === 'Past';
+	const secondPast = eventStatus(second) === 'Past';
+	if (firstPast !== secondPast) return firstPast ? 1 : -1;
+	const firstTime = timeValue(first);
+	const secondTime = timeValue(second);
+	return firstPast ? secondTime - firstTime : firstTime - secondTime;
+}
+
 export function formatEventRange(start: string, end?: string): string {
 	const startText = formatDate(start);
 	if (!end || !end.trim()) return startText;

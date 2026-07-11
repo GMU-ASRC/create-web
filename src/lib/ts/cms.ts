@@ -1,6 +1,6 @@
 import { env } from '$env/dynamic/public';
 import type { NewsEntry } from './news';
-import type { EventEntry } from './events';
+import { compareEvents, type EventEntry } from './events';
 import type { ResearchProject } from './research';
 import type { ResearchArticle } from './researchArticles';
 import type { PublicationSection, RawPublication } from './publications';
@@ -116,10 +116,6 @@ export const cms = {
 	async events(): Promise<EventEntry[] | null> {
 		const events = await fetchList<EventEntry>('events');
 		if (!events) return null;
-		const timeOf = (value?: string) => {
-			const time = Date.parse(value ?? '');
-			return Number.isNaN(time) ? -Infinity : time;
-		};
 		return events
 			.map((event) => ({
 				...event,
@@ -129,7 +125,7 @@ export const cms = {
 				gallery: (event.gallery ?? []).map((path) => resolveAsset(path) ?? '').filter(Boolean),
 				files: resolveFiles(event.files)
 			}))
-			.sort((first, second) => timeOf(second.date) - timeOf(first.date));
+			.sort(compareEvents);
 	},
 
 	async projects(): Promise<ResearchProject[] | null> {

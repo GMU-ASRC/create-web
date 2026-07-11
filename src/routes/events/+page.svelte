@@ -30,7 +30,8 @@
 	}
 
 	onMount(async () => {
-		events = (await cms.events()) ?? [];
+		const all = (await cms.events()) ?? [];
+		events = all.filter((event) => eventStatus(event) !== 'Past');
 		preloadImages(events.map((event) => event.image));
 		loading = false;
 	});
