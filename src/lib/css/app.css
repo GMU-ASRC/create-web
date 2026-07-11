@@ -207,3 +207,7 @@ html.a11y-dark .rich-content h1,
 html.a11y-dark .rich-content h2 {
 	color: #fafafa;
 }
+html.a11y-dark .rich-content blockquote {
+	color: #d4d4d8;
+	border-left-color: #d9a520;
+}
