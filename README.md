@@ -13,7 +13,7 @@ Public website for the GMU CREATE Lab. Content is managed in the sibling [CMS](.
 
 - SvelteKit with Svelte 5 runes
 - TailwindCSS v4 (theme tokens in `src/lib/css/app.css`)
-- `@sveltejs/adapter-vercel` for deployment
+- `@sveltejs/adapter-vercel` on Vercel, `@sveltejs/adapter-static` everywhere else (see Deployment)
 - `@iconify/svelte` for icons
 - Bun for installing and running
 
@@ -34,6 +34,21 @@ bun run preview  # preview the build
 
 Set `PUBLIC_CMS_URL` in `.env` to the CMS URL. The client in `src/lib/ts/cms.ts` fetches all
 content from it; uploaded assets are referenced as `/api/files/<id>` and resolved against that URL.
+
+## Deployment
+
+`vite.config.ts` picks the adapter automatically:
+
+- On Vercel, the `VERCEL` env var is set by their build system, so `bun run build` uses
+  `@sveltejs/adapter-vercel`. No extra setup needed.
+- Anywhere else (e.g. your machine, CI), `bun run build` uses `@sveltejs/adapter-static` and
+  produces a plain static/SPA build in `build/`, with `index.html` as the entry point and all
+  routing handled client-side. A `postbuild` step copies `index.html` to `404.html` so a static
+  host without rewrite rules still serves the app for direct links like `/events/some-talk`.
+
+Before building for a static host, make sure `PUBLIC_CMS_URL` points at the real production CMS
+(e.g. via a `.env.production` file), since it gets baked into the build at build time. Upload the
+contents of `build/` to the host.
 
 ## Structure
 
