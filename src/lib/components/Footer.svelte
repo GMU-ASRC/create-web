@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import AccessibilityControls from './AccessibilityControls.svelte';
-	import { siteLinkIcon, siteLinkLabel, type SiteContact, type SiteLink } from '$lib/ts/site';
+	import { basePath, siteLinkIcon, siteLinkLabel, type SiteContact, type SiteLink } from '$lib/ts/site';
 
 	let {
 		siteName = '',
@@ -10,7 +10,7 @@
 		contact = null,
 		links = [],
 		showAccessibility = true,
-		logo = '/create_logo.png'
+		logo = `${basePath}/create_logo.png`
 	}: {
 		siteName?: string;
 		institution?: string;

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/state';
+	import { basePath } from '$lib/ts/site';
 
 	const isNotFound = $derived(page.status === 404);
 </script>
@@ -26,7 +27,7 @@
 			{page.error?.message ?? 'An unexpected error occurred.'}
 		</p>
 		<a
-			href="/"
+			href={basePath || '/'}
 			class="mt-8 inline-flex items-center gap-2 bg-gmu-gold px-5 py-3 text-sm font-bold text-gmu-green-dark transition-colors hover:bg-white"
 		>
 			<Icon icon="mdi:home-outline" width="18" />

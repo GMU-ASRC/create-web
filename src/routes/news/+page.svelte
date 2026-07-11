@@ -10,8 +10,9 @@
 	import { cms } from '$lib/ts/cms';
 	import { newsLink, type NewsEntry } from '$lib/ts/news';
 	import { formatDate } from '$lib/ts/dates';
+	import { basePath } from '$lib/ts/site';
 
-	const newsBase = '/news';
+	const newsBase = `${basePath}/news`;
 	const pageSize = 10;
 
 	let news = $state<NewsEntry[]>([]);

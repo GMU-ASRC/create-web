@@ -10,6 +10,7 @@
 	import { cms, resolveAsset, relatedSectionsFrom } from '$lib/ts/cms';
 	import type { ResearchArticle } from '$lib/ts/researchArticles';
 	import type { PublicationSection } from '$lib/ts/publications';
+	import { basePath } from '$lib/ts/site';
 
 	let article = $state<ResearchArticle | null>(null);
 	let relatedSections = $state<PublicationSection[]>([]);
@@ -38,14 +39,14 @@
 	description={article
 		? `${article.title} (${article.years}), a research theme of the CREATE Lab at George Mason University.`
 		: 'A research theme of the CREATE Lab at George Mason University.'}
-	image={resolveAsset(article?.image) || '/create_logo.png'}
+	image={resolveAsset(article?.image) || `${basePath}/create_logo.png`}
 	url={page.url.href}
 	type="article"
 />
 
 <div class="mx-auto max-w-3xl px-4 py-12">
 	<a
-		href="/research"
+		href={`${basePath}/research`}
 		class="inline-flex items-center gap-1 text-sm font-medium text-gmu-green hover:underline"
 	>
 		<Icon icon="mdi:arrow-left" width="16" />

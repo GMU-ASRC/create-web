@@ -7,6 +7,7 @@
 	import { cms } from '$lib/ts/cms';
 	import type { Publication } from '$lib/ts/publications';
 	import { formatDate } from '$lib/ts/dates';
+	import { basePath } from '$lib/ts/site';
 
 	let publication = $state<Publication | null>(null);
 	let loading = $state(true);
@@ -61,7 +62,7 @@
 
 <div class="mx-auto max-w-4xl px-4 py-12">
 	<a
-		href="/publications"
+		href={`${basePath}/publications`}
 		class="inline-flex items-center gap-1 text-sm font-medium text-gmu-green hover:underline"
 	>
 		<Icon icon="mdi:arrow-left" width="16" />

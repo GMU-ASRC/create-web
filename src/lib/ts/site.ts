@@ -1,3 +1,5 @@
+import { base } from '$app/paths';
+
 export type NavLink = {
 	label: string;
 	path: string;
@@ -86,4 +88,4 @@ export const siteNav: NavLink[] = [
 	{ label: 'Gallery', path: 'gallery' }
 ];
 
-export const basePath = '';
+export const basePath = base;

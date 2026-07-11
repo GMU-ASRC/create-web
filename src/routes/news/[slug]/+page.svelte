@@ -9,6 +9,7 @@
 	import { cms } from '$lib/ts/cms';
 	import type { NewsEntry } from '$lib/ts/news';
 	import { formatDate } from '$lib/ts/dates';
+	import { basePath } from '$lib/ts/site';
 
 	let item = $state<NewsEntry | null>(null);
 	let loading = $state(true);
@@ -38,14 +39,14 @@
 	title={item?.title ?? 'News'}
 	description={bodyPlain ||
 		'A news update from the CREATE Lab at George Mason University.'}
-	image={item?.gallery?.[0] || '/create_logo.png'}
+	image={item?.gallery?.[0] || `${basePath}/create_logo.png`}
 	url={page.url.href}
 	type="article"
 />
 
 <div class="mx-auto max-w-3xl px-4 py-12">
 	<a
-		href="/news"
+		href={`${basePath}/news`}
 		class="inline-flex items-center gap-1 text-sm font-medium text-gmu-green hover:underline"
 	>
 		<Icon icon="mdi:arrow-left" width="16" />

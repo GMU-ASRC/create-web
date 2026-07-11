@@ -12,6 +12,7 @@
 	import type { ResearchProject } from '$lib/ts/research';
 	import type { PublicationSection } from '$lib/ts/publications';
 	import { memberPhoto, type Member } from '$lib/ts/group';
+	import { basePath } from '$lib/ts/site';
 
 	let project = $state<ResearchProject | null>(null);
 	let relatedSections = $state<PublicationSection[]>([]);
@@ -56,14 +57,14 @@
 		(project
 			? `${project.title}, a project of the CREATE Lab at George Mason University.`
 			: 'A project of the CREATE Lab at George Mason University.')}
-	image={project?.image || '/create_logo.png'}
+	image={project?.image || `${basePath}/create_logo.png`}
 	url={page.url.href}
 	type="article"
 />
 
 <div class="mx-auto max-w-3xl px-4 py-12">
 	<a
-		href="/projects"
+		href={`${basePath}/projects`}
 		class="inline-flex items-center gap-1 text-sm font-medium text-gmu-green hover:underline"
 	>
 		<Icon icon="mdi:arrow-left" width="16" />
@@ -133,7 +134,7 @@
 						{@const member = memberByName[name]}
 						{#if member}
 							<a
-								href={`/team/${member.slug || member.id}`}
+								href={`${basePath}/team/${member.slug || member.id}`}
 								class="group flex flex-col items-center text-center"
 							>
 								<img

@@ -15,6 +15,7 @@
 		type EventEntry
 	} from '$lib/ts/events';
 	import { memberPhoto, type Member } from '$lib/ts/group';
+	import { basePath } from '$lib/ts/site';
 
 	let event = $state<EventEntry | null>(null);
 	let memberByName = $state<Record<string, Member>>({});
@@ -50,14 +51,14 @@
 		(event
 			? `${event.title}, an event of the CREATE Lab at George Mason University.`
 			: 'An event of the CREATE Lab at George Mason University.')}
-	image={event?.image || '/create_logo.png'}
+	image={event?.image || `${basePath}/create_logo.png`}
 	url={page.url.href}
 	type="article"
 />
 
 <div class="mx-auto max-w-3xl px-4 py-12">
 	<a
-		href="/events"
+		href={`${basePath}/events`}
 		class="inline-flex items-center gap-1 text-sm font-medium text-gmu-green hover:underline"
 	>
 		<Icon icon="mdi:arrow-left" width="16" />
@@ -137,7 +138,7 @@
 						{@const member = memberByName[name]}
 						{#if member}
 							<a
-								href={`/team/${member.slug || member.id}`}
+								href={`${basePath}/team/${member.slug || member.id}`}
 								class="group flex flex-col items-center text-center"
 							>
 								<img

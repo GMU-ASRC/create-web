@@ -4,10 +4,11 @@
 	import { memberPhoto, type Member } from '$lib/ts/group';
 	import EducationList from '$lib/components/EducationList.svelte';
 	import { socialIcon, socialLabel } from '$lib/ts/socialIcons';
+	import { basePath } from '$lib/ts/site';
 
 	let { member }: { member: Member } = $props();
 
-	const href = $derived(`/team/${member.slug || member.id}`);
+	const href = $derived(`${basePath}/team/${member.slug || member.id}`);
 </script>
 
 <article class="group flex flex-col border border-slate-200 bg-white shadow-sm transition hover:border-gmu-green hover:shadow-md">

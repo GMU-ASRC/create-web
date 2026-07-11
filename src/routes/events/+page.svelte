@@ -16,6 +16,7 @@
 		formatEventRange,
 		type EventEntry
 	} from '$lib/ts/events';
+	import { basePath } from '$lib/ts/site';
 
 	const pageSize = 9;
 
@@ -55,7 +56,7 @@
 		{:else}
 			<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 				{#each visible as event (event.slug || event.id || event.title)}
-					{@const link = eventLink(event)}
+					{@const link = eventLink(event, `${basePath}/events`)}
 					{@const status = eventStatus(event)}
 					<a
 						href={link.href}

@@ -12,6 +12,7 @@
 	import { socialIcon, socialLabel } from '$lib/ts/socialIcons';
 	import { cms, preloadImages } from '$lib/ts/cms';
 	import { memberPhoto, type Member, type MemberGroup } from '$lib/ts/group';
+	import { basePath } from '$lib/ts/site';
 
 	let professor = $state<Member | null>(null);
 	let groups = $state<MemberGroup[]>([]);
@@ -59,7 +60,7 @@
 			<LoadState loading={false} empty="No team members yet." />
 		{:else}
 			<div class="flex flex-col gap-6 border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center">
-				<a href={`/team/${professor.slug || professor.id}`} class="group flex-shrink-0">
+				<a href={`${basePath}/team/${professor.slug || professor.id}`} class="group flex-shrink-0">
 					<Img
 						src={memberPhoto(professor.photo)}
 						alt={professor.name}
@@ -68,7 +69,7 @@
 				</a>
 				<div>
 					<p class="text-xs font-semibold tracking-widest text-gmu-green uppercase">{professor.group || 'Professor'}</p>
-					<a href={`/team/${professor.slug || professor.id}`}>
+					<a href={`${basePath}/team/${professor.slug || professor.id}`}>
 						<h2 class="mt-1 text-2xl font-bold text-slate-900 hover:text-gmu-green">{professor.name}</h2>
 					</a>
 					{#if professor.areaOfStudy}

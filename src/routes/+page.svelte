@@ -21,7 +21,7 @@
 	} from '$lib/ts/events';
 	import { formatDate } from '$lib/ts/dates';
 	import type { Sponsor } from '$lib/ts/home';
-	import { highlightLocations, type SiteHighlight } from '$lib/ts/site';
+	import { basePath, highlightLocations, type SiteHighlight } from '$lib/ts/site';
 
 	type SiteInfo = {
 		logo?: string;
@@ -33,7 +33,7 @@
 	};
 
 	let heroImages = $state<string[]>([]);
-	let labLogo = $state('/create_logo.png');
+	let labLogo = $state(`${basePath}/create_logo.png`);
 	let labName = $state('');
 	let labTagline = $state('');
 	let labIntro = $state('');
@@ -69,7 +69,7 @@
 			cms.events()
 		]);
 		if (info) {
-			labLogo = resolveAsset(info.logo) || '/create_logo.png';
+			labLogo = resolveAsset(info.logo) || `${basePath}/create_logo.png`;
 			labName = info.labName ?? '';
 			labTagline = info.tagline ?? '';
 			labIntro = info.intro ?? '';
@@ -128,14 +128,14 @@
 				<p class="mt-6 text-lg text-white/85">{labIntro}</p>
 				<div class="mt-8 flex flex-wrap gap-3">
 					<a
-						href="/projects"
+						href={`${basePath}/projects`}
 						class="inline-flex items-center gap-2 bg-gmu-gold px-5 py-3 text-sm font-bold text-gmu-green-dark transition-colors hover:bg-white"
 					>
 						View Projects
 						<Icon icon="mdi:arrow-right" width="18" />
 					</a>
 					<a
-						href="/team"
+						href={`${basePath}/team`}
 						class="inline-flex items-center gap-2 border border-white/50 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
 					>
 						Meet the Team
@@ -156,7 +156,7 @@
 				<div class="flex items-end justify-between gap-4">
 					<SectionHeading eyebrow="Projects" title="What we work on" />
 					<a
-						href="/projects"
+						href={`${basePath}/projects`}
 						class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
 					>
 						All projects
@@ -180,7 +180,7 @@
 				<div class="flex items-end justify-between gap-4">
 					<SectionHeading eyebrow="Research" title="In-depth research" />
 					<a
-						href="/research"
+						href={`${basePath}/research`}
 						class="hidden shrink-0 items-center gap-1 text-sm font-medium text-gmu-green hover:underline sm:flex"
 					>
 						All research
@@ -210,7 +210,7 @@
 						<Icon icon="mdi:newspaper-variant-outline" width="18" />
 						Latest News
 					</h3>
-					<a href="/news" class="inline-flex items-center gap-1 text-xs font-medium text-gmu-green hover:underline">
+					<a href={`${basePath}/news`} class="inline-flex items-center gap-1 text-xs font-medium text-gmu-green hover:underline">
 						All
 						<Icon icon="mdi:arrow-right" width="14" />
 					</a>
@@ -225,10 +225,10 @@
 				{:else if panelNews.length > 0}
 					<ul class="divide-y divide-slate-100">
 						{#each panelNews as item (item.title + item.date)}
-							{@const link = newsLink(item, '/news')}
+							{@const link = newsLink(item, `${basePath}/news`)}
 							<li>
 								<a
-									href={link ? link.href : '/news'}
+									href={link ? link.href : `${basePath}/news`}
 									target={link?.external ? '_blank' : undefined}
 									rel={link?.external ? 'noopener noreferrer' : undefined}
 									class="group block px-5 py-3 transition-colors hover:bg-slate-50"
@@ -255,7 +255,7 @@
 						<Icon icon="mdi:calendar-star" width="18" />
 						Events
 					</h3>
-					<a href="/events" class="inline-flex items-center gap-1 text-xs font-medium text-gmu-green hover:underline">
+					<a href={`${basePath}/events`} class="inline-flex items-center gap-1 text-xs font-medium text-gmu-green hover:underline">
 						All
 						<Icon icon="mdi:arrow-right" width="14" />
 					</a>
@@ -270,7 +270,7 @@
 				{:else if panelEvents.length > 0}
 					<ul class="divide-y divide-slate-100">
 						{#each panelEvents as event (event.slug || event.id || event.title)}
-							{@const elink = eventLink(event)}
+							{@const elink = eventLink(event, `${basePath}/events`)}
 							{@const status = eventStatus(event)}
 							<li>
 								<a

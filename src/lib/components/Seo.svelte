@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { siteName } from '$lib/ts/navigation';
+	import { basePath } from '$lib/ts/site';
+
+	const defaultImage = `${basePath}/create_logo.png`;
 
 	let {
 		title,
 		description,
 		brand = `${siteName} | CREATE Lab`,
-		image = '/create_logo.png',
+		image = defaultImage,
 		url = '',
 		type = 'website'
 	}: {
@@ -32,7 +35,7 @@
 		return image;
 	});
 
-	const cardType = $derived(image && image !== '/create_logo.png' ? 'summary_large_image' : 'summary');
+	const cardType = $derived(image && image !== defaultImage ? 'summary_large_image' : 'summary');
 </script>
 
 <svelte:head>

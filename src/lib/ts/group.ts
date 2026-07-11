@@ -1,3 +1,5 @@
+import { basePath } from './site';
+
 export type SocialKind = 'scholar' | 'orcid' | 'linkedin' | 'researchgate' | 'other';
 
 export type SocialLink = {
@@ -32,7 +34,7 @@ export type MemberGroup = {
 	members: Member[];
 };
 
-export const memberPhotoPlaceholder = '/team-placeholder.svg';
+export const memberPhotoPlaceholder = `${basePath}/team-placeholder.svg`;
 
 export function memberPhoto(photo?: string): string {
 	return photo && photo.trim() ? photo : memberPhotoPlaceholder;

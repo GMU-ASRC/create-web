@@ -12,6 +12,7 @@
 	import { memberPhoto, type Member } from '$lib/ts/group';
 	import { projectLink, type ResearchProject } from '$lib/ts/research';
 	import { publicationsForMember, type PublicationSection } from '$lib/ts/publications';
+	import { basePath } from '$lib/ts/site';
 
 	let member = $state<Member | null>(null);
 	let label = $state('');
@@ -66,14 +67,14 @@
 	description={member
 		? `${member.name}, ${label} in the CREATE Lab at George Mason University.`
 		: 'A member of the CREATE Lab at George Mason University.'}
-	image={member?.photo || '/create_logo.png'}
+	image={member?.photo || `${basePath}/create_logo.png`}
 	url={page.url.href}
 	type="profile"
 />
 
 <div class="mx-auto max-w-4xl px-4 py-12">
 	<a
-		href="/team"
+		href={`${basePath}/team`}
 		class="inline-flex items-center gap-1 text-sm font-medium text-gmu-green hover:underline"
 	>
 		<Icon icon="mdi:arrow-left" width="16" />
@@ -146,7 +147,7 @@
 				<h2 class="text-lg font-bold text-slate-900">Projects</h2>
 				<ul class="mt-4 divide-y divide-slate-200 border-y border-slate-200">
 					{#each memberProjects as project (project.slug || project.id || project.title)}
-						{@const link = projectLink(project, '/research', '/projects')}
+						{@const link = projectLink(project, `${basePath}/research`, `${basePath}/projects`)}
 						<li>
 							<a
 								href={link.href}

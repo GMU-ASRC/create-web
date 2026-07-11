@@ -3,6 +3,7 @@
 	import Pagination from './Pagination.svelte';
 	import type { PublicationSection } from '$lib/ts/publications';
 	import { formatDate } from '$lib/ts/dates';
+	import { basePath } from '$lib/ts/site';
 
 	let { section }: { section: PublicationSection } = $props();
 
@@ -30,7 +31,7 @@
 				<span class="text-slate-500">{entry.authors}.</span>
 				{#if entry.id}
 					<a
-						href={`/publications/${entry.id}`}
+						href={`${basePath}/publications/${entry.id}`}
 						class="font-semibold text-slate-900 hover:text-gmu-green hover:underline"
 					>
 						{entry.title}

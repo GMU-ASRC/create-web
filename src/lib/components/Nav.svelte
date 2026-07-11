@@ -3,14 +3,15 @@
 	import { page } from '$app/state';
 	import { siteNav, basePath } from '$lib/ts/site';
 
-	let { siteName = '', logo = '/create_logo.png' }: { siteName?: string; logo?: string } = $props();
+	let { siteName = '', logo = `${basePath}/create_logo.png` }: { siteName?: string; logo?: string } =
+		$props();
 
 	let menuOpen = $state(false);
 
 	const homeHref = basePath || '/';
 
 	function linkHref(path: string): string {
-		return path ? `/${path}` : homeHref;
+		return path ? `${basePath}/${path}` : homeHref;
 	}
 
 	function isActive(path: string): boolean {
