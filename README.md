@@ -17,10 +17,6 @@ Public website for the GMU CREATE Lab. Content is managed in the sibling [CMS](.
 - `@iconify/svelte` for icons
 - Bun for installing and running
 
-The app is client-rendered (`src/routes/+layout.ts` sets `ssr = false`), fetching all content
-from the CMS at runtime, with a short in-memory cache and image preloading in `src/lib/ts/cms.ts`.
-A footer accessibility panel (text size, high contrast, reduce motion) can be toggled from Site Info.
-
 ## Getting Started
 
 ```bash
