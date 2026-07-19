@@ -49,11 +49,3 @@ content from it; uploaded assets are referenced as `/api/files/<id>` and resolve
 Before building for a static host, make sure `PUBLIC_CMS_URL` points at the real production CMS
 (e.g. via a `.env.production` file), since it gets baked into the build at build time. Upload the
 contents of `build/` to the host.
-
-## Structure
-
-- `src/routes/` page routes (`/`, `projects`, `research`, `team`, `publications`, `news`, `gallery`, plus `[slug]`/`[id]` detail pages)
-- `src/lib/components/` reusable components
-- `src/lib/ts/` data types and the CMS client
-- `src/lib/css/app.css` Tailwind import and theme tokens
-- `static/` image and icon assets
