@@ -37,7 +37,7 @@
 	brand="CREATE Lab"
 	title={article?.title ?? 'Research'}
 	description={article
-		? `${article.title} (${article.years}), a research theme of the CREATE Lab at George Mason University.`
+		? `${article.title} (${article.status}), a research theme of the CREATE Lab at George Mason University.`
 		: 'A research theme of the CREATE Lab at George Mason University.'}
 	image={resolveAsset(article?.image) || `${basePath}/create_logo.png`}
 	url={page.url.href}
@@ -57,7 +57,7 @@
 		<LoadState {loading} empty="Research article not found." />
 	{:else}
 		<p class="mt-8 font-mono text-xs font-semibold tracking-widest text-gmu-green uppercase">
-			{article.years}
+			{article.status}
 		</p>
 		<h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{article.title}</h1>
 		{#if article.author}

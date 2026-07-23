@@ -26,7 +26,7 @@
 			return {
 				title: article.title,
 				author: article.author,
-				years: article.years,
+				status: article.status,
 				slug: article.slug,
 				image: resolveAsset(article.image) || match?.image || '',
 				href: ''

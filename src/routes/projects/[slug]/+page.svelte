@@ -74,9 +74,9 @@
 	{#if loading || !project}
 		<LoadState {loading} empty="Project not found." />
 	{:else}
-		{#if project.status}
+		{#if project.years}
 			<p class="mt-8 font-mono text-xs font-semibold tracking-widest text-gmu-green uppercase">
-				{project.status}
+				{project.years}
 			</p>
 		{/if}
 		<h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">{project.title}</h1>

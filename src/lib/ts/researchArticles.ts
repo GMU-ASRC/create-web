@@ -12,7 +12,7 @@ export type ResearchArticle = {
 	slug: string;
 	title: string;
 	author?: string;
-	years: string;
+	status?: string;
 	image?: string;
 	content?: string;
 	blocks: ArticleBlock[];
@@ -25,7 +25,6 @@ export const researchArticles: ResearchArticle[] = [
 	{
 		slug: 'autonomous-coordination',
 		title: 'Autonomous Coordination of Networked Cyber-Physical Systems',
-		years: '2012 - 2020',
 		blocks: [
 			{
 				text: 'Networked cyber-physical systems (CPS) are systems in which communication, computation, and control are very tightly coupled and interacting in some way with the physical world. In order to properly design a successfully networked CPS, these three things must be considered simultaneously. In general, each component must be designed with the others in mind. For instance, a controller cannot be designed assuming perfect information is available at all times, as this requires perfect computation, communication, and sensing from other subsystems in the network.',
