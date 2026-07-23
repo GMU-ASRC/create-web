@@ -133,6 +133,7 @@ export const cms = {
 		return (
 			projects?.map((project) => ({
 				...project,
+				status: undefined,
 				image: resolveAsset(project.image) ?? '',
 				summary: absolutizeAssets(project.summary ?? ''),
 				content: absolutizeAssets(project.content ?? ''),
